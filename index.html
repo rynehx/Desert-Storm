@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Desert Storm</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="1300" height="750"></canvas>
+
+<script>
+
+
+{////load images and sounds/////
+var menugraphic=new Image();
+menugraphic.src = "menugraphic.bmp";
+var tutorial=new Image();
+tutorial.src = "Tutorial.bmp";
+var gameovergraphic=new Image();
+gameovergraphic.src = "gameovergraphic.bmp";
+var background=new Image();
+background.src = "backgroundimg.bmp";
+var canvas=document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+var playerturret=new Image();
+playerturret.src = "playerturret.bmp";
+var playerbody=new Image();
+playerbody.src = "playerbody.bmp";
+var playergun=new Image();
+playergun.src = "playergun.bmp";  
+var enemygun=new Image();
+enemygun.src = "enemygun.bmp";
+var enemyturret=new Image();
+enemyturret.src = "enemyturret.bmp";
+var enemybody=new Image();
+enemybody.src = "enemybody.bmp";
+var enemybodyburned=new Image();
+enemybodyburned.src="enemybodyburned.bmp";
+var fire=new Image();
+fire.src="fire.bmp";
+var smoke=new Image();
+smoke.src="smoke.bmp";  
+var impact=new Image();
+impact.src="impact.bmp";  
+var playerturretclip=[[15,0],[0,9],[0,27],[4,59],[39,59],[43,27],[43,9],[28,0]];
+var playerbodyclip=[[0,0],[0,96],[10,96],[10,99],[37,99],[37,96],[47,96],[47,0]];
+var playergunclip=[[3,0],[2,1],[2,11],[1,11],[1,16],[2,16],[2,26],[2,28],[0,32],[7,32],[7,28],[5,26],[5,16],[6,16],[6,11],[5,11],[5,1],[4,0]];
+var enemybodyclip=[[0,0],[0,101],[13,101],[13,109],[41,109],[41,101],[53,101],[53,0],[40,0],[40,5],[13,5],[13,0],[0,0]];
+var enemygunclip=[[2,0],[2,27],[1,28],[1,34],[2,35],[2,56],[0,58],[0,64],[6,64],[6,58],[4,56],[4,35],[5,34],[5,28],[4,27],[4,0]];
+var enemyturretclip=[[10,0],[10,1],[6,1],[4,2],[0,7],[0,21],[1,25],[4,31],[6,33],[8,34],[8,37],[12,39] ,[22,39],[26,37],[26,34],[28,33],[30,31],[32,24],[34,21] ,[34,7] ,[30,2],[28,1],[24,1],[24,0]];
+var fireclip=[[34,17],[27,10],[17,6],[12,6],[19,15],[6,16],[0,29],[11,25],[23,32],[10,32],[15,37],[3,50],[7,48],
+[1,64],[3,79],[11,60],[20,53],[14,67],[18,66],[19,82],[26,73],[29,82],[37,79],[43,82],[49,82],[46,69],[67,80],
+[69,75],[77,77],[71,69],[82,73],[77,65],[82,56],[74,56],[67,49],[72,50],[80,44],[78,29],[82,18],[79,4],[70,17],
+[62,21],[57,14],[56,25],[53,0],[45,2],[41,0],[40,10],[36,3]];
+var smokeclip=[[160,2],[148,8],[144,9],[132,26],[121,33],[113,46],[106,53],[101,64],[101,79],[88,101],[83,105],[76,118],
+[66,121],[61,137],[52,150],[44,159],[43,167],[33,175],[22,206],[24,226],[10,241],[14,255],[3,270],
+[1,276],[3,280],[14,280],[24,275],[35,272],[37,264],[51,262],[62,251],[71,249],[77,242],[78,221],[90,221],
+[115,208],[120,205],[122,196],[135,188],[158,189],[178,163],[198,163],[206,156],[210,142],[224,135],[235,106],
+[238 ,90],[255,73],[257,56],[265,41],[264,36],[254,28],[254,12],[248,7],[239,5],[207,5],[196,9],[185,5],[169,5]];
+ var impactclip=[[27,0],[28,12],[22,8],[20,14],[16,12],[2,9],[10,14],[8,19],[11,25],[7,29],[8,34],[0,44],[0,49],[11,40],[14,50],[21,47],[24,49],[30,62],[31,52],[34,45],[45,51],[44,44],[49,40],[43,32],[50,30],[50,27],[61,22],[63,18],[53,19],[41,16],[38,12],[34,4]];
+ 
+ 
+var enemygungreen=new Image();
+enemygungreen.src = "enemygungreen.bmp";
+var enemyturretgreen=new Image();
+enemyturretgreen.src = "enemyturretgreen.bmp";
+var enemybodygreen=new Image();
+enemybodygreen.src = "enemybodygreen.bmp";  
+var enemygunred=new Image();
+enemygunred.src = "enemygunred.bmp";
+var enemyturretred=new Image();
+enemyturretred.src = "enemyturretred.bmp";
+var enemybodyred=new Image();
+enemybodyred.src = "enemybodyred.bmp";
+var armorb=new Image();
+armorb.src="armorb.bmp";  
+var armorw=new Image();
+armorw.src="armorw.bmp";    
+var damageb=new Image();
+damageb.src="damageb.bmp";  
+var damagew=new Image();
+damagew.src="damagew.bmp";   
+var speedb=new Image();
+speedb.src="speedb.bmp";  
+var speedw=new Image();
+speedw.src="speedw.bmp";    
+var firerateb=new Image();
+firerateb.src="firerateb.bmp";  
+var fireratew=new Image();
+fireratew.src="fireratew.bmp";    
+var health=new Image();
+health.src="health.bmp";  
+var gunfire = new Audio("gunfire.wav"); 
+hitsound=[new Audio("hit1.wav"),new Audio("hit2.wav"),new Audio("hit3.wav")]
+killsound=[new Audio("kill1.wav"),new Audio("kill2.wav"),new Audio("kill3.wav")]
+var inferno = new Audio("inferno.wav");
+var move = new Audio("move.wav"); 
+
+
+
+  }////////
+ 
+{//Inital Variables//
+var menu=0;
+var player={xcoord:300,ycoord:300,xsize:47,ysize:100,filling:"#0095DD",rot:0,speed:1,turnrate:0.05*Math.PI,health:100,ihealth:100,gun1dmg:25,gears:[-0.5,0,1,2],firerate:100,armor:0,count:0,ready:true,gunxcoord:undefined,gunycoord:undefined,gunxsize:5,gunysize:60,gunfilling:"#cc00ff",gunrot:0,fire:false};//player object
+var canvasleft=canvas.getBoundingClientRect().left;//canvas on screen left coord
+var canvastop=canvas.getBoundingClientRect().top;//canvas on screen top coord
+var numofenemy=0;//number of enemy on screen (level 1 =3)
+var bullet=[];//array containing bullet fired by player (bullets are objects pushed onto the array)
+var enemybullet=[];//array containing bullet fired by enemy
+var enemy=[];//array containing enemy tanks (enemy are objects pushed onto the array)
+var powerup=[]; //power ups are objects that pushed onto the powerup array (the appear at a certain probability after killing any enemy)
+var impactarr=[];//contains the object to denote image of impacts of bullets hitting tanks
+var mousepos=[0,0];//initial mouse position
+var canvasx=canvas.width;//canvas width
+var canvasy=canvas.height;//canvas length
+var canvaslocalx=0;//x coord of top left of canvas relative to full map. this allows the camera to be focused on the player as he/she navigates the full map.
+var canvaslocaly=0;//y coord of top left of canvas relative to full map. this allows the camera to be focused on the player as he/she navigates the full map.
+var boundx=3000;//full map width
+var boundy=3000;//full map height
+var debre=[];//debree from destroyed tanks-array containing objects to denote where to animate tank debre after they are destroyed
+var enemyhealth=[50,100,150];//initial health levels of enemy tanks (this is used during enemy creation) Green tank is 50, red is 100 and beige is 150.
+var score={damage:1,armor:1,firerate:1,speed:1}; // power up level of the player (initial is 1)
+var level=0; //current level (initial 1)
+
+}//////
+
+{//player colored bullet constructor////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function masterbullet(){
+this.xcoord=player.gunxrotcen+(Math.cos(player.gunrot-(0.5*Math.PI))* player.gunysize);//coordinate of bullet after leaving the player's muzzle
+this.ycoord=player.gunyrotcen+(Math.sin(player.gunrot-(0.5*Math.PI))* player.gunysize);//coordinate of bullet after leaving the player's muzzle
+this.xpath=Math.cos(player.gunrot-(0.5*Math.PI));//the direction bullet is moving in. As a vector of x axis
+this.ypath=Math.sin(player.gunrot-(0.5*Math.PI));//the direction bullet is moving in. As a vector of y axis
+this.trace=0; //this variables to used to keep track of the length of the bullet trace (visual)
+this.playerxspeed=player.xspeed; //this is used to keep track of the player x-axis speed in order to reflect momentum of the player added to the fired bullet.
+this.playeryspeed=player.yspeed; //this is used to keep track of the player y-axis speed in order to reflect momentum of the player added to the fired bullet.
+}
+masterbullet.prototype={//bullet prototype that every bullet uses and stays constant for every bullet
+size:3, //bullet radius
+filling:"#00FF00", //player fired bullet color
+speed:30 //speed the bullet travels per frame
+}
+}//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+{//enemy bullet constructor//////////////////////////////properties similar to player bullets
+function masterenemybullet(i){
+this.xcoord=enemy[i].xrotcen+(Math.cos(enemy[i].rotgun)* enemy[i].gunlength[enemy[i].type]);//player.xcoord+0.5*player.xsize+(Math.cos(player.gunrot-(0.5*Math.PI))* player.gunysize);
+this.ycoord=enemy[i].yrotcen+(Math.sin(enemy[i].rotgun)* enemy[i].gunlength[enemy[i].type]);//player.ycoord+0.5*player.ysize+(Math.sin(player.gunrot-(0.5*Math.PI))* player.gunysize);
+this.xpath=Math.cos(enemy[i].rotgun);
+this.ypath=Math.sin(enemy[i].rotgun);
+this.trace=0;
+}
+masterenemybullet.prototype={
+size:3,
+filling:"#FF0000",
+speed:25,
+gundmg:15
+}
+}/////////////
+
+{//enemy constructor///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function masterenemy(n){
+this.alive=true;//to denote if the enemy is alive or not
+this.type=n;//to denote type of enemy (green, red, or beige
+this.xcoord=Math.random()*boundx; //x coord of enemy body's top left corner
+this.ycoord=Math.random()*boundy;  //y coord of enemy body's top left corner
+this.health=enemyhealth[n];//health level of enemy
+//
+this.rotbody=Math.random()*2*Math.PI;//body orientation
+this.rotgun=Math.random()*2*Math.PI;//turret and gun orientation
+
+this.count=0; //this keeps track of enemy reload time
+this.ready=true; //if the enemy gun is ready to fire
+}
+
+masterenemy.prototype={///prototype for all enemies. The three element arrays are used to reference enemy propoerties for the 3 type of enemies
+xsize:[53,53,53],
+ysize:[100,100,100], //have an array of values respective to each type of enemy
+xturretsize:[25,25,25],
+yturretsize:[25,25,25],
+gunlength:[77,77,77],
+filling:"#4B0082",
+speed:[1,1.5,2.1],
+healthbarsize:100,
+initialhealth:enemyhealth,
+armor:[0,0,0],
+detectr1:[300,300,300],
+detectr2:[500,500,500],
+detectr3:[600,600,600],
+bodyturnrate:0.01,
+gunturnrate:0.01,
+dturretx:[17,17,17],
+dturrety:[17,17,17],
+dgunx:[2,2,2],
+dguny:[75,75,75],
+deyrotcen:[2,2,2]
+}
+
+}/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+{//debree constructor //makes the destroyed tank object to animate destroyed tanks
+function debreconstruct(obj){
+this.xcoord=obj.xcoord;
+this.ycoord=obj.ycoord;
+this.xsize=obj.xsize[obj.type];
+this.ysize=obj.ysize[obj.type];
+this.rotbody=obj.rotbody;
+this.xcen=obj.xcen;
+this.ycen=obj.ycen;
+this.timer=0;
+}
+}
+
+{////powerup constructor//// makes power ups when enemy dies
+function powerupconstruct(obj){
+this.xcoord=obj.xcoord-25;
+this.ycoord=obj.ycoord;
+this.timer=0;
+this.flash=true;
+var type=Math.random();//randomly chooses a power up
+
+if(type<0.07){//determines what power up to spawn
+this.poweruptype="damage";
+}else if(type<0.14){
+this.poweruptype="speed";
+}else if(type<0.21){
+this.poweruptype="firerate"
+}else if(type<0.28){
+this.poweruptype="armor"
+}else{
+this.poweruptype="health"
+}
+}
+
+}
+
+function makeenemy(){//the function to create enemies on the map at beginning of every level.
+for (var i=0;i<numofenemy;i++){
+var rand=Math.random();
+var type;
+if(rand<0.6){type=0;}else if(rand<0.9){type=1;}else{type=2;}//chooses type of enemy to spawn, green has highest chance, beige the lowest
+enemy.push(new masterenemy(type));
+}
+}
+
+function drawimpact(arr){//draws the impact of bullets hitting tanks 
+ctx.save();
+ctx.translate(arr[0]-22-canvaslocalx,arr[1]-30-canvaslocaly);
+ctx.scale(arr[2]/100*2.5,arr[2]/100*2.5)
+ctx.translate(-arr[0]+22+canvaslocalx,-arr[1]+30+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(impactclip[0][0]+arr[0]-canvaslocalx-22,impactclip[0][1]+arr[1]-canvaslocaly-30);
+for (var j=1;j<impactclip.length;j++){
+ ctx.lineTo(impactclip[j][0]+arr[0]-canvaslocalx-22,impactclip[j][1]+arr[1]-canvaslocaly-30);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(impact,arr[0]-canvaslocalx-22,arr[1]-canvaslocaly-30);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+}
+
+function baseradian(n){ //round off any angle value that exceeds 0 and 2 PI- it is used just to keep rotation angles at lower angles .
+if (n<0){
+return ((n%(2*Math.PI))+(2*Math.PI));
+}else{
+return n%(2*Math.PI);
+}
+}
+
+function timer(obj,timelength){//counts up if timer is started// used to keep track to reloading times
+if(obj.count<timelength && obj.ready===false){
+obj.count+=1;
+}
+else if(obj.count>=timelength &&obj.ready===false){
+obj.ready=true;
+obj.count=0;
+}
+}
+
+function enemyAI(){ //code for enemy AI action for every frame
+
+for (var i=0;i<enemy.length;i++){
+if(enemy[i].alive===true){
+timer(enemy[i],100);//used to keep track of enemy reload time, if the enemy fired already and have to reload then it well count to 100 then reset the enemy to ready to fire status.
+
+enemy[i].xcen=enemy[i].xcoord+(enemy[i].xsize[enemy[i].type]/2); //x location of center of enemy body (this is the center of body rotations)
+enemy[i].ycen=enemy[i].ycoord+(enemy[i].ysize[enemy[i].type]/2); //y location of center of enemy body (this is the center of body rotations)
+enemy[i].xrotcen= ((0)*Math.cos(enemy[i].rotbody+(Math.PI/2)) - (enemy[i].deyrotcen[enemy[i].type])*Math.sin(enemy[i].rotbody+(Math.PI/2)))+enemy[i].xcen; //determines the x location center of the turret/gun (if the center of gun rotation and center of body rotation coincide then xcen=xrotcen, ycen=yrotcen)
+enemy[i].yrotcen=((enemy[i].deyrotcen[enemy[i].type])*Math.cos(enemy[i].rotbody+(Math.PI/2)) +(0)*Math.sin(enemy[i].rotbody+(Math.PI/2)))+enemy[i].ycen; //determines the y location center of the turret/gun (if the center of gun rotation and center of body rotation coincide then xcen=xrotcen, ycen=yrotcen)
+var dx=player.xcen-(enemy[i].xcen);//distance between player and enemy[i] x tank enter
+var dy=player.ycen-(enemy[i].ycen);//distance between player and enemy[i] y tank enter
+
+if(dx>0 ){//this determines the angle between enemy and player with respect to the horizontal
+var rot=Math.atan(dy/dx);
+}else if(dx<0){
+var rot=Math.PI+Math.atan(dy/dx);
+}
+
+var rotdiffbody=(baseradian(rot)-baseradian(enemy[i].rotbody));//this determines the angle difference between current enemy body orientation and the angle the enemy is oriented to the player
+var rotdiffgun =(baseradian(rot)-baseradian(enemy[i].rotgun));//this determines the angle difference between current enemy gun orientation and the angle the enemy is oriented to the player
+var movetresh=0.2; //this is the angle tolerance the enemy is allowed to start moving and chase after the player 
+
+var dist=Math.sqrt((enemy[i].xcen-player.xcen)*(enemy[i].xcen-player.xcen)+(enemy[i].ycen-player.ycen)*(enemy[i].ycen-player.ycen));//absolute distance between player and enemy[i]
+
+if(dist < enemy[i].detectr3[enemy[i].type] && dist > enemy[i].detectr2[enemy[i].type]){//if the player is inside radius 3 and outside radius 2 then the enemy moves towards the player when it finished turning in the player direction within the movetreshhold.
+///////////////////////////////////////////////////////////
+if(rotdiffbody > 0 && Math.abs(rotdiffbody) > Math.PI){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}else if( rotdiffbody >0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+};
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) > Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+  };
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}
+
+
+if(rotdiffgun > 0 && Math.abs(rotdiffgun) > Math.PI){//this rotates the gun towards the player
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}else if( rotdiffgun >0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) > Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}
+///////////////////////////////////////////////////////
+}else if(dist < enemy[i].detectr2[enemy[i].type] && dist > enemy[i].detectr1[enemy[i].type]){//if the radius between enemy[i] and player is less than radius 2 and greater than enemy 1 then the enemy moves towards the player when its orientation is within the tolerance and it also fires if the gun origination is within the angle tolerance
+///////////////////////////////////////////////////////////
+if(rotdiffbody > 0 && Math.abs(rotdiffbody) > Math.PI){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}else if( rotdiffbody >0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+};
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) > Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+  };
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}
+
+if ( Math.abs(rotdiffgun)<Math.PI*0.05&& enemy[i].ready===true){ //if enemy gun orientation is within 0.05*Pi of facing player center then it fires buy pushing a newly constructed enemy bullet to the enemy bullet array 
+var newenemybullet= new masterenemybullet(i);
+enemybullet.push(newenemybullet);
+enemy[i].ready=false;//this says that this enemy is reloading
+enemy[i].count=0;//this sets the time past since fire so the reload timer can begin.
+
+}
+
+if(rotdiffgun > 0 && Math.abs(rotdiffgun) > Math.PI){//this turns the gun towards player
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}else if( rotdiffgun >0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) > Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}
+///////////////////////////////////////////////////////
+}else if(dist < enemy[i].detectr1[enemy[i].type]) { //if the distance is less than radius 1 then the enemy just turns turret and fires. it ceases to move after coming closer than radius 1.
+///////////////////////////////////////////////////////////
+
+if(rotdiffgun > 0 && Math.abs(rotdiffgun) > Math.PI){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}else if( rotdiffgun >0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) > Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}
+
+
+if ( Math.abs(rotdiffgun)<Math.PI*0.05&& enemy[i].ready===true){
+var newenemybullet= new masterenemybullet(i);
+enemybullet.push(newenemybullet);
+enemy[i].ready=false;
+enemy[i].count=0;
+
+}
+
+
+}
+
+
+
+
+}
+}
+}
+
+function playercalc(){//this function calculates the player properties for each frame
+///moving the body
+timer(player,player.firerate);/// to keep track of player reload time, if the player fired already and have to reload then it well count to 100 then reset the player to ready to fire status.
+player.yspeed=player.gears[player.speed]*Math.sin((player.rot));///y player speed
+player.xspeed=player.gears[player.speed]*Math.cos((player.rot));///x player speed
+player.xcen=player.xcoord+(player.xsize/2);
+player.ycen=player.ycoord+(player.ysize/2);
+///local canvas frame/// since the size of the map is bigger than the current canvas, the canvas is a local version of the total map and this calculates what portion of the map to animate.
+if(player.xcen>canvasx/2 && player.xcen<boundx-canvasx/2){  //checks boundary.
+canvaslocalx=player.xcen-(canvasx/2);
+}
+if(player.ycen>canvasy/2 && player.ycen<boundy-canvasy/2){
+canvaslocaly=player.ycen-(canvasy/2);
+}
+
+////
+if(player.xcen+player.xspeed>0 && player.xcen+player.xspeed<boundx && player.ycen+player.yspeed>0 && player.ycen+player.yspeed<boundy){  //checks boundary. if player is outside the bounds of map then it pushes player back onto the map and set speed to 0. or gear index 1.
+player.xcoord+=player.xspeed;//if in bound proceed normal
+player.ycoord+=player.yspeed;
+}else{
+player.xcoord-=10*player.xspeed;//pushes player back if out of bound.
+player.ycoord-=10*player.yspeed;
+player.speed=1; //this is the gear index not the actual speed value. gear is an array of actual player speed.
+}
+
+///
+
+///moving the turret center after body rotation// if the gun/turret center does not coincide with the center of body then the center of gun/turret shifts if the player body rotates. this calculates the location 
+player.gunxcoord=player.xcoord+(0.5*player.xsize)-(player.gunxsize/2);
+player.gunycoord=player.ycoord-(player.ysize)/7;
+var xrotcenold=(player.gunxcoord+(player.gunxsize/2));
+var yrotcenold=(player.gunycoord+player.gunysize);
+player.gunxrotcen=((xrotcenold-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (yrotcenold-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+player.gunyrotcen=((yrotcenold-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(xrotcenold-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+////
+
+
+//rotating turret////////determines what angle to rotate the turret in order to follow the mouse
+var dx=mousepos[0]-(player.gunxrotcen-canvaslocalx); //this determines distance between player center on the canvas to the mouse.
+var dy=mousepos[1]-(player.gunyrotcen-canvaslocaly);
+if(dx>0 ){ //this calculates the angle of rotation from the above distance
+player.gunrot=(0.5*Math.PI)+Math.atan(dy/dx);
+}else if(dx<0){
+player.gunrot=((1.5)*Math.PI)+Math.atan(dy/dx);
+}
+
+if (player.fire===true){//if mouseclick indict to fire bullet then player fires bullet.
+player.ready=false;
+player.timer=0;
+var newbullet= new masterbullet;
+bullet.push(newbullet);
+playsound("gunfire");
+player.fire=false;
+}
+
+
+
+/////////////
+}
+
+function drawenemy(){//function to draw the enemy tanks
+
+for (var i=0;i<enemy.length;i++){//draws body
+if(enemy[i].alive===true){
+ctx.save();
+ctx.translate(enemy[i].xcen-canvaslocalx,enemy[i].ycen-canvaslocaly);
+ctx.rotate(enemy[i].rotbody+(Math.PI/2));
+ctx.translate(-enemy[i].xcen+canvaslocalx,-enemy[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemybodyclip[0][0]+enemy[i].xcoord-canvaslocalx,enemybodyclip[0][1]+enemy[i].ycoord-canvaslocaly);
+for (var j=1;j<enemybodyclip.length;j++){
+ ctx.lineTo(enemybodyclip[j][0]+enemy[i].xcoord-canvaslocalx,enemybodyclip[j][1]+enemy[i].ycoord-canvaslocaly);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+if(enemy[i].type===0){
+ctx.drawImage(enemybodygreen,enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly);
+}else if(enemy[i].type===1){
+ctx.drawImage(enemybodyred,enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly);
+}else{
+ctx.drawImage(enemybody,enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly);
+}
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+
+
+
+ctx.save();//draws turret
+ctx.translate(enemy[i].xrotcen-canvaslocalx,enemy[i].yrotcen-canvaslocaly);
+ctx.rotate(enemy[i].rotgun+(Math.PI/2));
+ctx.translate(-enemy[i].xrotcen+canvaslocalx,-enemy[i].yrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemyturretclip[0][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemyturretclip[0][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+for (var j=1;j<enemyturretclip.length;j++){
+ ctx.lineTo(enemyturretclip[j][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemyturretclip[j][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+if(enemy[i].type===0){
+ctx.drawImage(enemyturretgreen,enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}else if(enemy[i].type===1){
+ctx.drawImage(enemyturretred,enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}else{
+ctx.drawImage(enemyturret,enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+
+
+
+/// drwas gun///
+ctx.save();
+ctx.translate(enemy[i].xrotcen-canvaslocalx,enemy[i].yrotcen-canvaslocaly);
+ctx.rotate(enemy[i].rotgun+(Math.PI/2));
+ctx.translate(-enemy[i].xrotcen+canvaslocalx,-enemy[i].yrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemygunclip[0][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemygunclip[0][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+for (var j=1;j<enemygunclip.length;j++){
+ ctx.lineTo(enemygunclip[j][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemygunclip[j][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+if(enemy[i].type===0){
+ctx.drawImage(enemygungreen,enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}else if(enemy[i].type===1){
+ctx.drawImage(enemygunred,enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}else{
+ctx.drawImage(enemygun,enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+///
+
+
+///draws hp bar/// this is the red bar in the back
+ctx.save()
+ctx.fillStyle="#FF0000";
+ctx.beginPath();
+ctx.rect(enemy[i].xcoord-canvaslocalx-((enemy[i].healthbarsize/2)-(enemy[i].xsize[enemy[i].type]/2)),enemy[i].ycoord-canvaslocaly-60,enemy[i].healthbarsize,10);
+ctx.fill();
+ctx.restore()
+
+///draws hp bar/// this is the green bar showing remaining health
+ctx.save()
+ctx.fillStyle="#008000";
+ctx.beginPath();
+ctx.rect(enemy[i].xcoord-canvaslocalx-((enemy[i].healthbarsize/2)-(enemy[i].xsize[enemy[i].type]/2)),enemy[i].ycoord-canvaslocaly-60,(enemy[i].health/enemy[i].initialhealth[enemy[i].type])*enemy[i].healthbarsize,10);
+ctx.fill();
+ctx.restore()
+///////
+}
+}
+}
+
+function drawplayer(){//draws the player
+//body
+ctx.save()
+ctx.translate(player.xcen-canvaslocalx,player.ycen-canvaslocaly);
+ctx.rotate(player.rot+(Math.PI/2));
+ctx.translate(-player.xcen+canvaslocalx,-player.ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(playerbodyclip[0][0]+player.xcoord-canvaslocalx,playerbodyclip[0][1]+player.ycoord-canvaslocaly);
+for (var i=1;i<playerbodyclip.length;i++){
+ ctx.lineTo(playerbodyclip[i][0]+player.xcoord-canvaslocalx,playerbodyclip[i][1]+player.ycoord-canvaslocaly);
+}
+ctx.clip();
+ctx.save()
+ctx.beginPath();
+ctx.drawImage(playerbody,player.xcoord-canvaslocalx,player.ycoord-canvaslocaly);
+ctx.restore();
+ctx.restore()
+ctx.restore();
+
+
+//turret
+ctx.save();
+ctx.beginPath();
+ctx.translate(player.gunxrotcen-canvaslocalx,player.gunyrotcen-canvaslocaly);
+ctx.rotate(player.gunrot);
+ctx.translate(-player.gunxrotcen+canvaslocalx,-player.gunyrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(playerturretclip[0][0]+player.gunxrotcen-21-canvaslocalx,playerturretclip[0][1]+player.gunyrotcen-canvaslocaly-30);
+for (var i=1;i<playerturretclip.length;i++){
+ ctx.lineTo(playerturretclip[i][0]+player.gunxrotcen-21-canvaslocalx,playerturretclip[i][1]+player.gunyrotcen-canvaslocaly-30);
+}
+  ctx.clip();
+ctx.save()
+ctx.beginPath();
+ctx.drawImage(playerturret,player.gunxrotcen-21-canvaslocalx,player.gunyrotcen-canvaslocaly-30);
+ctx.restore();
+ctx.restore()
+ctx.restore();
+
+
+//gun
+ctx.save();
+ctx.beginPath();
+ctx.translate(player.gunxrotcen-canvaslocalx,player.gunyrotcen-canvaslocaly);
+ctx.rotate(player.gunrot);
+ctx.translate(-player.gunxrotcen+canvaslocalx,-player.gunyrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(playergunclip[0][0]+player.gunxrotcen-4-canvaslocalx,playergunclip[0][1]+player.gunyrotcen-canvaslocaly-60);
+for (var i=1;i<playergunclip.length;i++){
+ ctx.lineTo(playergunclip[i][0]+player.gunxrotcen-4-canvaslocalx,playergunclip[i][1]+player.gunyrotcen-canvaslocaly-60);
+}
+  ctx.clip();
+ctx.save()
+ctx.beginPath();
+ctx.drawImage(playergun,player.gunxrotcen-4-canvaslocalx,player.gunyrotcen-canvaslocaly-60);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+///player health bar///
+ctx.save();
+ctx.fillStyle="#FF0000";
+ctx.beginPath();
+ctx.rect(20,canvasy-45,300,25);
+ctx.fill();
+ctx.restore();
+ctx.save();
+ctx.fillStyle="#008000";
+ctx.beginPath();
+ctx.rect(20,canvasy-45,(player.health/player.ihealth)*300,25);
+ctx.fill();
+ctx.restore();
+////////
+
+
+////fire ready?//this draws the icon to show if player is ready to fire again. green is go. red means reloading
+ctx.save();
+if(player.ready===true){ ctx.fillStyle="#00FF00"; }else{ ctx.fillStyle="#800000";};
+ctx.beginPath();
+ctx.rect(340,canvasy-45,25,25);
+ctx.fill();
+ctx.restore();
+
+////
+}
+
+function drawdebre(){//draws destroyed enemy tanks
+for(var i=0;i<debre.length;i++){
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(debre[i].rotbody+(Math.PI/2));
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemybodyclip[0][0]+debre[i].xcoord-canvaslocalx,enemybodyclip[0][1]+debre[i].ycoord-canvaslocaly);
+for (var j=1;j<enemybodyclip.length;j++){
+ ctx.lineTo(enemybodyclip[j][0]+debre[i].xcoord-canvaslocalx,enemybodyclip[j][1]+debre[i].ycoord-canvaslocaly);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(enemybodyburned,debre[i].xcoord-canvaslocalx,debre[i].ycoord-canvaslocaly);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+////////////////fire/////////////////
+
+
+
+}
+}
+
+function drawpowerup(){///draws power ups
+for(var i=0;i<powerup.length;i++){
+ctx.save();
+ctx.beginPath();
+
+
+
+if(powerup[i].poweruptype==="damage"){
+if(powerup[i].flash===true){
+ctx.drawImage(damageb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(damagew,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype==="speed"){
+if(powerup[i].flash===true){
+ctx.drawImage(speedb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(speedw,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype==="firerate"){
+if(powerup[i].flash===true){
+ctx.drawImage(firerateb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(fireratew,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype==="armor"){
+if(powerup[i].flash===true){
+ctx.drawImage(armorb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(armorw,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype=="health"){
+ctx.drawImage(health,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+}
+
+
+ctx.restore();
+}
+}
+
+function draweffects(){//draws fire and smoke coming from destroyed enemy tanks
+
+for(var i=0;i<debre.length;i++){
+
+if(debre[i].timer<5){
+////fire/////
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*2*Math.PI);
+ctx.scale(2, 2);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(fireclip[0][0]+debre[i].xcoord-canvaslocalx-16,fireclip[0][1]+debre[i].ycoord-canvaslocaly+12);
+for (var j=1;j<fireclip.length;j++){
+ ctx.lineTo(fireclip[j][0]+debre[i].xcoord-canvaslocalx-16,fireclip[j][1]+debre[i].ycoord-canvaslocaly+12);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(fire,debre[i].xcoord-canvaslocalx-16,debre[i].ycoord-canvaslocaly+12);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+}else if (debre[i].timer<300){
+////fire/////
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*2*Math.PI);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(fireclip[0][0]+debre[i].xcoord-canvaslocalx-16,fireclip[0][1]+debre[i].ycoord-canvaslocaly+12);
+for (var j=1;j<fireclip.length;j++){
+ ctx.lineTo(fireclip[j][0]+debre[i].xcoord-canvaslocalx-16,fireclip[j][1]+debre[i].ycoord-canvaslocaly+12);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(fire,debre[i].xcoord-canvaslocalx-16,debre[i].ycoord-canvaslocaly+12);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+///////////smoke////////////////
+
+ctx.save()
+
+ctx.save();
+ctx.beginPath()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*0.005*Math.PI);
+ctx.scale((debre[i].timer/300), (debre[i].timer/300));
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.moveTo(smokeclip[0][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[0][1]+debre[i].ycoord-canvaslocaly-225);
+for (var j=1;j<smokeclip.length;j++){
+ ctx.lineTo(smokeclip[j][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[j][1]+debre[i].ycoord-canvaslocaly-225);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(smoke,debre[i].xcoord-canvaslocalx+16,debre[i].ycoord-canvaslocaly-225);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+}else{
+////fire/////
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*2*Math.PI);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(fireclip[0][0]+debre[i].xcoord-canvaslocalx-16,fireclip[0][1]+debre[i].ycoord-canvaslocaly+12);
+for (var j=1;j<fireclip.length;j++){
+ ctx.lineTo(fireclip[j][0]+debre[i].xcoord-canvaslocalx-16,fireclip[j][1]+debre[i].ycoord-canvaslocaly+12);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(fire,debre[i].xcoord-canvaslocalx-16,debre[i].ycoord-canvaslocaly+12);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+///////////smoke////////////////
+
+ctx.save()
+
+ctx.save();
+ctx.beginPath()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*0.005*Math.PI);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.moveTo(smokeclip[0][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[0][1]+debre[i].ycoord-canvaslocaly-225);
+for (var j=1;j<smokeclip.length;j++){
+ ctx.lineTo(smokeclip[j][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[j][1]+debre[i].ycoord-canvaslocaly-225);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(smoke,debre[i].xcoord-canvaslocalx+16,debre[i].ycoord-canvaslocaly-225);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+}
+
+if (debre[i].timer<300){
+debre[i].timer+=1;
+}
+}
+
+
+impactarr.forEach(drawimpact)
+
+impactarr=[];
+
+
+}
+
+function drawbullet(){//draws bullet of the player with a green trace
+for (var i=0;i<bullet.length;i++){
+ctx.save();
+ctx.beginPath();
+ctx.fillStyle=bullet[i].filling;
+
+for (var j=0;j<bullet[i].trace;j++){//loop is used to draw a trace following the actual location of the bullet.
+ctx.arc(bullet[i].xcoord-canvaslocalx-(j/10)*(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord-canvaslocaly-(j/10)*(bullet[i].ypath*bullet[i].speed),bullet[i].size,0,2*Math.PI,false);
+}
+
+ctx.fill();
+bullet[i].xcoord+=(bullet[i].xpath*bullet[i].speed)+bullet[i].playerxspeed;
+bullet[i].ycoord+=(bullet[i].ypath*bullet[i].speed)+bullet[i].playeryspeed;
+ctx.restore();
+if(bullet[i].trace<50){//this is used to increase the length of the trace as the bullet exits the barrel. It will reach a maximum length
+bullet[i].trace+=10;
+}
+
+}
+}
+
+function drawenemybullet(){//draws enemy bullets with a red trace
+for (var i=0;i<enemybullet.length;i++){
+ctx.save();
+ctx.beginPath();
+ctx.fillStyle=enemybullet[i].filling;
+for (var j=0;j<enemybullet[i].trace;j++){
+ctx.arc(enemybullet[i].xcoord-canvaslocalx-(j/10)*(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord-canvaslocaly-(j/10)*(enemybullet[i].ypath*enemybullet[i].speed),enemybullet[i].size,0,2*Math.PI,false);
+}
+
+ctx.fill();
+enemybullet[i].xcoord+=(enemybullet[i].xpath*enemybullet[i].speed);
+enemybullet[i].ycoord+=(enemybullet[i].ypath*enemybullet[i].speed);
+ctx.restore();
+
+if(enemybullet[i].trace<50){
+enemybullet[i].trace+=10;
+}
+
+}
+}
+
+function keyDownHandler(e){//determines what to do when certain keys are pressed.
+ if(e.keyCode == 68) {//d
+	player.rot+=player.turnrate; //turns player
+    }
+
+    else if(e.keyCode == 65) {//a
+	player.rot-=player.turnrate; //turns player
+	
+    }
+	 else if(e.keyCode == 87) {
+	 if(player.speed<3){        
+        player.speed+=1;		 //shift up gear
+		}
+    }
+	 else if(e.keyCode == 83) {
+	 if(player.speed>0){       //shift down gear
+		player.speed-=1;		
+		}
+    }	 else if(e.keyCode == 32) {
+	 
+	menu=1; //space to start or restart game
+
+	}else if(e.keyCode == 84) { 
+	 if (menu!=1){//t to access tutorial but not during game play
+	menu=3;
+}
+	}
+}
+
+function drawbackground(){//draw desert background of the game
+ctx.save();
+    ctx.drawImage(background,-canvaslocalx,-canvaslocaly);
+		ctx.restore();
+}
+
+function mouseMove(e){//gives local canvas location of mouse
+mousepos[0]=(e.clientX-canvasleft); 
+mousepos[1]=(e.clientY-canvastop);
+}
+
+function mouseclick(e){//detects mouse click and tells playercalc() to fire a bullet
+
+if(player.ready===true&&menu===1){
+
+player.fire=true;
+
+}
+
+}
+
+function checkbullet(){//check if bullet of player or enemy is out of bound. If out of bound the bullets are deleted from their respective arrays
+for (var i=0;i<bullet.length;i++){
+if(bullet[i].xcoord < (bullet[i].size/2) ||   bullet[i].xcoord  > boundx-(bullet[i].size/2)  || bullet[i].ycoord  < (bullet[i].size/2) || bullet[i].ycoord > boundy-(bullet[i].size/2)  )
+{
+bullet.splice(i,1);
+i--;
+}
+}
+
+for (var j=0;j<enemybullet.length;j++){
+if(enemybullet[j].xcoord < (enemybullet[j].size/2) ||   enemybullet[j].xcoord  > boundx-(enemybullet[j].size/2)  || enemybullet[j].ycoord  < (enemybullet[j].size/2) || enemybullet[j].ycoord > boundy-(enemybullet[j].size/2)  )
+{
+enemybullet.splice(j,1);
+j--;
+}
+}
+
+
+}
+
+function checkobstacle(){ //determines player to enemy and player to destroyed enemy collisions
+
+////check player and enemy collision///pushes both back
+for (var i=0;i<enemy.length;i++){
+if(enemy[i].alive===true){
+if(Math.sqrt((enemy[i].xcen-player.xcen)*(enemy[i].xcen-player.xcen)+(enemy[i].ycen-player.ycen)*(enemy[i].ycen-player.ycen))<=( (Math.sqrt((player.xsize*player.xsize)+(player.ysize*player.ysize))/2) + (Math.sqrt((enemy[i].xsize[enemy[i].type]*enemy[i].xsize[enemy[i].type])+(enemy[i].ysize[enemy[i].type]*enemy[i].ysize[enemy[i].type]))/2))/1.5){
+player.xcoord-=5*player.xspeed;
+player.ycoord-=5*player.yspeed;
+player.speed=1;
+enemy[i].xcoord-=5*enemy[i].speed[enemy[i].type]*Math.cos((enemy[i].rotbody));
+enemy[i].ycoord-=5*enemy[i].speed[enemy[i].type]*Math.sin((enemy[i].rotbody));
+
+}
+}
+}
+////check player and destroyed enemy collision///pushes both back
+for (var i=0;i<debre.length;i++){
+if(Math.sqrt((debre[i].xcen-player.xcen)*(debre[i].xcen-player.xcen)+(debre[i].ycen-player.ycen)*(debre[i].ycen-player.ycen))<=( (Math.sqrt((player.xsize*player.xsize)+(player.ysize*player.ysize))/2) + (Math.sqrt((debre[i].xsize*debre[i].xsize)+(debre[i].ysize*debre[i].ysize))/2)/1.5   ) ){
+player.xcoord-=5*player.xspeed;
+player.ycoord-=5*player.yspeed;
+player.speed=1;
+debre[i].xcoord+=5*player.xspeed;
+debre[i].ycoord+=5*player.yspeed;
+debre[i].xcen+=5*player.xspeed;
+debre[i].ycen+=5*player.yspeed;
+}
+}
+
+for (var i=0;i<powerup.length;i++){//checks if player got a power up, the power up level increases as well as modifying player status upon colliding with a power up.
+if(powerup[i].xcoord<player.xcen&&powerup[i].xcoord+100>player.xcen&&powerup[i].ycoord<player.ycen&&powerup[i].ycoord+100>player.ycen){
+if(powerup[i].poweruptype==="damage" &&score.damage<4){
+score.damage+=1;
+powerup.splice(i,1)
+player.gun1damage+=25;
+}else if(powerup[i].poweruptype==="speed"&&score.speed<4){
+score.speed+=1;
+powerup.splice(i,1)
+
+player.gears=player.gears.map(function(a){return a*1.3; });
+
+
+}else if(powerup[i].poweruptype==="firerate"&&score.firerate<4){
+score.firerate+=1;
+powerup.splice(i,1)
+player.firerate-=20;
+
+}else if(powerup[i].poweruptype==="armor"&&score.armor<4){
+score.armor+=1;
+powerup.splice(i,1)
+player.armor+=3;
+}else if(powerup[i].poweruptype==="health"&&player.health+30<100){
+player.health+=30;
+powerup.splice(i,1)
+}else if(powerup[i].poweruptype==="health"&&player.health+30>=100){
+player.health=100;
+powerup.splice(i,1)
+}else{
+powerup.splice(i,1)
+}
+}
+}
+
+
+}
+
+function isinsiderect(ptx,pty,rectx,recty){//a function to see if a point is inside of a rectangle// this is used to see if a bullets hit the player or an enemy
+var calcx=[];
+
+var j=rectx.length-1;
+for (var i=0;i<rectx.length;i++){
+if ((pty<recty[i]&&pty>recty[j] ) || (pty<recty[j]&&pty>recty[i]) ){
+  
+ 
+calcx.push(rectx[i]+((pty-recty[i])*((rectx[j]-rectx[i])/(recty[j]-recty[i])))); 
+
+}
+j=i
+}
+
+console.log(calcx[0]+" "+calcx[1])
+if ((ptx<calcx[0] && ptx > calcx[1]) || (ptx>calcx[0] && ptx< calcx[1])){
+return true
+}else{
+return false
+}
+
+}
+
+function playerbulletcollison(){//checks to see if the player bullets hit any enemies// uses isinsiderect() to determine
+var topleftx;
+var toprightx;
+var botrightx;
+var botleftx;
+var toplefty;
+var toprighty;
+var botrighty;
+var botlefty;
+
+
+for(var j=0;j<enemy.length;j++){
+for(var i=0;i<bullet.length;i++){
+
+//the long math is to calc the rotated corner coordinates of the player body
+
+
+if(enemy[j].alive===true){
+if (Math.sqrt((enemy[j].xcen-bullet[i].xcoord)*(enemy[j].xcen-bullet[i].xcoord)+(enemy[j].ycen-bullet[i].ycoord)*(enemy[j].ycen-bullet[i].ycoord))< Math.sqrt((enemy[j].xsize[enemy[j].type]*enemy[j].xsize[enemy[j].type])+(enemy[j].ysize[enemy[j].type]*enemy[j].ysize[enemy[j].type])  )/2)  {
+
+topleftx=((enemy[j].xcoord-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+toprightx=((enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+botrightx=((enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+botleftx=((enemy[j].xcoord-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+toplefty= ((enemy[j].ycoord-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+toprighty=((enemy[j].ycoord-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+botrighty=((enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+botlefty=((enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+
+
+if ( isinsiderect(bullet[i].xcoord-(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord-(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) || 
+isinsiderect(bullet[i].xcoord,bullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) 
+||isinsiderect(bullet[i].xcoord+(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord+(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ){
+if (enemy[j].health-(player.gun1dmg-enemy[j].armor[enemy[j].type])<=0){//if enemy is hit and its health is below zero then enemy alive staus is set to false and a powerup may drop.
+if(Math.random()>0.5){//50% chance of power up drop
+powerup.push(new powerupconstruct(enemy[j]));
+}else{
+debre.push(new debreconstruct(enemy[j]));
+}
+
+
+enemy[j].alive=false;
+bullet.splice(i,1);
+
+playsound("kill")
+
+
+//j--;
+//break
+}else{// if enemy is hit the bullet is deleted and enemy health is reduced by the damage of the player bullet. 
+enemy[j].health-=(player.gun1dmg-enemy[j].armor[enemy[j].type]);//Impact is created to animate the impact
+impactarr.push([Math.min(bullet[i].xcoord),Math.min(bullet[i].ycoord)]);
+bullet.splice(i,1); //the bullet is deleted
+i--;
+
+playsound("hit")
+}
+}
+}
+}
+}
+}
+}
+/////////////////////////////////
+
+function enemybulletcollison(){////checks to see if the enemy bullets hit the player// uses isinsiderect() to determine
+var topleftx;
+var toprightx;
+var botrightx;
+var botleftx;
+var toplefty;
+var toprighty;
+var botrighty;
+var botlefty;
+
+
+for(var i=0;i<enemybullet.length;i++){
+
+
+//the long math is to calc the rotated corner coordinates of the player body
+
+if (Math.sqrt((player.xcen-enemybullet[i].xcoord)*(player.xcen-enemybullet[i].xcoord)+(player.ycen-enemybullet[i].ycoord)*(player.ycen-enemybullet[i].ycoord))< Math.sqrt((player.xsize*player.xsize)+(player.ysize*player.ysize)  )/2)  {
+
+topleftx=((player.xcoord-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+toprightx=((player.xcoord+player.xsize-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+botrightx=((player.xcoord+player.xsize-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord+player.ysize-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+botleftx=((player.xcoord-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord+player.ysize-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+toplefty= ((player.ycoord-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+toprighty=((player.ycoord-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord+player.xsize-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+botrighty=((player.ycoord+player.ysize-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord+player.xsize-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+botlefty=((player.ycoord+player.ysize-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+
+if ( isinsiderect(enemybullet[i].xcoord-(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord-(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) || 
+isinsiderect(enemybullet[i].xcoord,enemybullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) 
+||isinsiderect(enemybullet[i].xcoord+(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord+(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ){
+
+
+
+if (enemybullet[i].gundmg-player.armor>0){//if player armor is greater than the damage of the enemy then the bullet has not effect.
+if (player.health-(enemybullet[i].gundmg-player.armor)<=0){//if player health is below zero then it goes to the game over menu
+
+menu=2;
+   
+}else{//if bullet hit player then player health is reduced. 
+player.health-=(enemybullet[i].gundmg-player.armor);
+}
+
+
+}
+impactarr.push([Math.min(enemybullet[i].xcoord),Math.min(enemybullet[i].ycoord)]);//impact is created to animate the impact
+enemybullet.splice(i,1);// enemy bullet is deleted
+i--;
+playsound("hit");
+}
+
+}
+}
+}
+
+
+{//listeners for player input///////////////////////////
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("mousemove", mouseMove, false);
+document.addEventListener("click", mouseclick, false);
+}//////////////////////////////////////////////////////
+
+function write(){	//writes the texts on the screen
+ctx.save()
+ctx.fillStyle="#1E90FF";
+ctx.font="45px Georgia";
+ctx.fillText(  "Level "+level ,1120,60);
+ctx.restore()
+
+ctx.save()
+ctx.fillStyle="#696969";
+ctx.font="25px Georgia";
+ctx.fillText(  "Damage Level: "+score.damage ,500,canvasy-30);
+ctx.restore()
+
+ctx.save()
+ctx.fillStyle="#000080";
+ctx.font="25px Georgia";
+ctx.fillText(  "Speed Level: "+score.speed,700,canvasy-30);
+ctx.restore()
+
+ctx.save()
+ctx.fillStyle="#7CFC00";
+ctx.font="25px Georgia";
+ctx.fillText(  "Fire Rate Level: "+score.firerate ,890,canvasy-30);
+ctx.restore()
+
+ctx.save()
+ctx.fillStyle="#FF6347";
+ctx.font="25px Georgia";
+ctx.fillText(  "Armor: "+score.armor ,1120,canvasy-30);
+ctx.restore()
+
+}
+
+function playsound(type){ //a function to play whatever sound is called
+
+if(type==="gunfire"){
+gunfire.currentTime=0;
+gunfire.play();
+}else if(type==="hit"){
+var rand=Math.random();
+if(rand<0.33){
+hitsound[0].currentTime=0;
+hitsound[0].play();
+}else if(rand<0.66){
+hitsound[1].currentTime=0;
+hitsound[1].play();
+
+}else{
+hitsound[2].currentTime=0;
+hitsound[2].play();
+
+}
+}else if(type==="kill"){
+var rand=Math.random();
+if(rand<0.33){
+killsound[0].currentTime=0;
+killsound[0].play();
+}else if(rand<0.66){
+killsound[1].currentTime=0;
+killsound[1].play();
+
+}else{
+killsound[2].currentTime=0;
+killsound[2].play();
+}
+}
+};
+
+function levelcheck(){//checks if all enemy is dead, if so then start next level
+var alive=0;
+enemy.forEach(function(a){if(a.alive===true) {alive+=1}})  
+if(alive===0){
+
+initialize();
+makeenemy();
+
+
+
+    
+}
+}
+
+function initialize(){//function used to initialize new level
+numofenemy+=3;//number of enemy on screen
+bullet=[];//array containing bullet fired by player
+enemybullet=[];//array containing bullet fired by enemy
+enemy=[];//array containing enemy tanks
+powerup=[];
+impactarr=[];
+debre=[];
+player.health=100;
+level+=1;
+}
+
+function draw(){//the maser function to rule them all that runs all the other function make the game
+
+if (menu===0){//this shows the menu
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(menugraphic,0,0);
+ctx.restore();
+requestAnimationFrame(draw);
+}else if(menu===3){//this shows the tutorial screen
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(tutorial,0,0);
+ctx.restore();
+requestAnimationFrame(draw);
+}else if(menu===1){//this runs the game
+levelcheck();
+player.rot=baseradian(player.rot);
+enemyAI();
+playercalc();
+checkbullet();
+checkobstacle();
+playerbulletcollison();
+enemybulletcollison();
+drawbackground();
+drawdebre();
+drawbullet();
+drawenemybullet();
+drawenemy();
+drawplayer();
+draweffects();
+drawpowerup();
+write();
+requestAnimationFrame(draw);
+}else if (menu===2){//this is the game over screen
+initialize();
+numofenemy=0;
+level=0;
+canvaslocalx=0;//x coord of top left of canvas relative to full map.
+canvaslocaly=0;
+score={damage:1,armor:1,firerate:1,speed:1};
+player={xcoord:300,ycoord:300,xsize:47,ysize:100,filling:"#0095DD",rot:0,speed:1,turnrate:0.05*Math.PI,health:100,ihealth:100,gun1dmg:25,gears:[-0.5,0,1,2],firerate:100,armor:0,count:0,ready:true,gunxcoord:undefined,gunycoord:undefined,gunxsize:5,gunysize:60,gunfilling:"#cc00ff",gunrot:0,fire:false};
+makeenemy();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(gameovergraphic,0,0);
+ctx.restore();
+requestAnimationFrame(draw);
+
+}
+}
+
+
+
+draw();//calls the draw function and initializes the entire game
+
+
+
+</script>
+
+</body>
+</html>

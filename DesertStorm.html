@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Desert Storm</title>
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #eee; display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="1300" height="750"></canvas>
+
+<script>
+
+
+var menu=0;
+
+
+{////images and sounds/////
+var menugraphic=new Image();
+menugraphic.src = "menugraphic.bmp";
+var tutorial=new Image();
+tutorial.src = "tutorial.bmp";
+var gameovergraphic=new Image();
+gameovergraphic.src = "gameovergraphic.bmp";
+var background=new Image();
+background.src = "backgroundimg.bmp";
+var canvas=document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d');
+var playerturret=new Image();
+playerturret.src = "playerturret.bmp";
+var playerbody=new Image();
+playerbody.src = "playerbody.bmp";
+var playergun=new Image();
+playergun.src = "playergun.bmp";  
+var enemygun=new Image();
+enemygun.src = "enemygun.bmp";
+var enemyturret=new Image();
+enemyturret.src = "enemyturret.bmp";
+var enemybody=new Image();
+enemybody.src = "enemybody.bmp";
+var enemybodyburned=new Image();
+enemybodyburned.src="enemybodyburned.bmp";
+var fire=new Image();
+fire.src="fire.bmp";
+var smoke=new Image();
+smoke.src="smoke.bmp";  
+var impact=new Image();
+impact.src="impact.bmp";  
+var playerturretclip=[[15,0],[0,9],[0,27],[4,59],[39,59],[43,27],[43,9],[28,0]];
+var playerbodyclip=[[0,0],[0,96],[10,96],[10,99],[37,99],[37,96],[47,96],[47,0]];
+var playergunclip=[[3,0],[2,1],[2,11],[1,11],[1,16],[2,16],[2,26],[2,28],[0,32],[7,32],[7,28],[5,26],[5,16],[6,16],[6,11],[5,11],[5,1],[4,0]];
+var enemybodyclip=[[0,0],[0,101],[13,101],[13,109],[41,109],[41,101],[53,101],[53,0],[40,0],[40,5],[13,5],[13,0],[0,0]];
+var enemygunclip=[[2,0],[2,27],[1,28],[1,34],[2,35],[2,56],[0,58],[0,64],[6,64],[6,58],[4,56],[4,35],[5,34],[5,28],[4,27],[4,0]];
+var enemyturretclip=[[10,0],[10,1],[6,1],[4,2],[0,7],[0,21],[1,25],[4,31],[6,33],[8,34],[8,37],[12,39] ,[22,39],[26,37],[26,34],[28,33],[30,31],[32,24],[34,21] ,[34,7] ,[30,2],[28,1],[24,1],[24,0]];
+var fireclip=[[34,17],[27,10],[17,6],[12,6],[19,15],[6,16],[0,29],[11,25],[23,32],[10,32],[15,37],[3,50],[7,48],
+[1,64],[3,79],[11,60],[20,53],[14,67],[18,66],[19,82],[26,73],[29,82],[37,79],[43,82],[49,82],[46,69],[67,80],
+[69,75],[77,77],[71,69],[82,73],[77,65],[82,56],[74,56],[67,49],[72,50],[80,44],[78,29],[82,18],[79,4],[70,17],
+[62,21],[57,14],[56,25],[53,0],[45,2],[41,0],[40,10],[36,3]];
+var smokeclip=[[160,2],[148,8],[144,9],[132,26],[121,33],[113,46],[106,53],[101,64],[101,79],[88,101],[83,105],[76,118],
+[66,121],[61,137],[52,150],[44,159],[43,167],[33,175],[22,206],[24,226],[10,241],[14,255],[3,270],
+[1,276],[3,280],[14,280],[24,275],[35,272],[37,264],[51,262],[62,251],[71,249],[77,242],[78,221],[90,221],
+[115,208],[120,205],[122,196],[135,188],[158,189],[178,163],[198,163],[206,156],[210,142],[224,135],[235,106],
+[238 ,90],[255,73],[257,56],[265,41],[264,36],[254,28],[254,12],[248,7],[239,5],[207,5],[196,9],[185,5],[169,5]];
+ var impactclip=[[27,0],[28,12],[22,8],[20,14],[16,12],[2,9],[10,14],[8,19],[11,25],[7,29],[8,34],[0,44],[0,49],[11,40],[14,50],[21,47],[24,49],[30,62],[31,52],[34,45],[45,51],[44,44],[49,40],[43,32],[50,30],[50,27],[61,22],[63,18],[53,19],[41,16],[38,12],[34,4]];
+ 
+ 
+var enemygungreen=new Image();
+enemygungreen.src = "enemygungreen.bmp";
+var enemyturretgreen=new Image();
+enemyturretgreen.src = "enemyturretgreen.bmp";
+var enemybodygreen=new Image();
+enemybodygreen.src = "enemybodygreen.bmp";  
+var enemygunred=new Image();
+enemygunred.src = "enemygunred.bmp";
+var enemyturretred=new Image();
+enemyturretred.src = "enemyturretred.bmp";
+var enemybodyred=new Image();
+enemybodyred.src = "enemybodyred.bmp";
+var armorb=new Image();
+armorb.src="armorb.bmp";  
+var armorw=new Image();
+armorw.src="armorw.bmp";    
+var damageb=new Image();
+damageb.src="damageb.bmp";  
+var damagew=new Image();
+damagew.src="damagew.bmp";   
+var speedb=new Image();
+speedb.src="speedb.bmp";  
+var speedw=new Image();
+speedw.src="speedw.bmp";    
+var firerateb=new Image();
+firerateb.src="firerateb.bmp";  
+var fireratew=new Image();
+fireratew.src="fireratew.bmp";    
+var health=new Image();
+health.src="health.bmp";  
+
+
+
+
+var gunfire = new Audio("gunfire.wav"); 
+
+hitsound=[new Audio("hit1.wav"),new Audio("hit2.wav"),new Audio("hit3.wav")]
+killsound=[new Audio("kill1.wav"),new Audio("kill2.wav"),new Audio("kill3.wav")]
+var inferno = new Audio("inferno.wav");
+var move = new Audio("move.wav"); 
+
+
+
+  }////////
+ 
+{//Inital Variables//
+
+var player={xcoord:300,ycoord:300,xsize:47,ysize:100,filling:"#0095DD",rot:0,speed:1,turnrate:0.05*Math.PI,health:100,ihealth:100,gun1dmg:25,gears:[-0.5,0,1,2],firerate:100,armor:0,count:0,ready:true,gunxcoord:undefined,gunycoord:undefined,gunxsize:5,gunysize:60,gunfilling:"#cc00ff",gunrot:0,fire:false};
+//player object
+var canvasleft=canvas.getBoundingClientRect().left;//canvas on screen left coord
+var canvastop=canvas.getBoundingClientRect().top;//canvas on screen top coord
+var numofenemy=3;//number of enemy on screen
+var bullet=[];//array containing bullet fired by player
+var enemybullet=[];//array containing bullet fired by enemy
+var enemy=[];//array containing enemy tanks
+var powerup=[];
+var impactarr=[];
+
+var mousepos=[0,0];//initial mouse position
+var canvasx=canvas.width;//canvas width
+var canvasy=canvas.height;//canvas length
+var canvaslocalx=0;//x coord of top left of canvas relative to full map.
+var canvaslocaly=0;//y coord of top left of canvas relative to full map.
+var boundx=3000;//full map width
+var boundy=3000;//full map height
+var obstacle=[];//debree from destroyed tanks
+var debre=[];
+var enemyhealth=[50,100,150];//initial health levels of enemy tanks
+var score={damage:1,armor:1,firerate:1,speed:1};
+var level=1;
+
+}//////
+
+{//bullet constructor////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function masterbullet(){
+	this.xcoord=player.gunxrotcen+(Math.cos(player.gunrot-(0.5*Math.PI))* player.gunysize);//player.xcoord+0.5*player.xsize+(Math.cos(player.gunrot-(0.5*Math.PI))* player.gunysize);
+	this.ycoord=player.gunyrotcen+(Math.sin(player.gunrot-(0.5*Math.PI))* player.gunysize);//player.ycoord+0.5*player.ysize+(Math.sin(player.gunrot-(0.5*Math.PI))* player.gunysize);
+	this.xpath=Math.cos(player.gunrot-(0.5*Math.PI));
+	this.ypath=Math.sin(player.gunrot-(0.5*Math.PI));
+	this.trace=0;
+	this.playerxspeed=player.xspeed;
+	this.playeryspeed=player.yspeed;
+}
+masterbullet.prototype={
+size:3,
+filling:"#00FF00",
+speed:30
+}
+}//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+{//enemybullet constructor//////////////////////////////
+function masterenemybullet(i){
+this.xcoord=enemy[i].xrotcen+(Math.cos(enemy[i].rotgun)* enemy[i].gunlength[enemy[i].type]);//player.xcoord+0.5*player.xsize+(Math.cos(player.gunrot-(0.5*Math.PI))* player.gunysize);
+this.ycoord=enemy[i].yrotcen+(Math.sin(enemy[i].rotgun)* enemy[i].gunlength[enemy[i].type]);//player.ycoord+0.5*player.ysize+(Math.sin(player.gunrot-(0.5*Math.PI))* player.gunysize);
+this.xpath=Math.cos(enemy[i].rotgun);
+this.ypath=Math.sin(enemy[i].rotgun);
+this.trace=0;
+}
+masterenemybullet.prototype={
+size:3,
+filling:"#FF0000",
+speed:25,
+gundmg:15
+}
+}/////////////
+
+
+{//enemy constructor///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function masterenemy(n){
+this.alive=true;
+this.type=n;
+this.xcoord=Math.random()*boundx;
+this.ycoord=Math.random()*boundy;
+this.health=enemyhealth[n];
+//
+this.rotbody=Math.random()*2*Math.PI;
+this.rotgun=Math.random()*2*Math.PI;
+
+this.count=0;
+this.ready=true;
+}
+
+masterenemy.prototype={
+xsize:[53,53,53],
+ysize:[100,100,100], //have an array of values respective to each type of enemy
+xturretsize:[25,25,25],
+yturretsize:[25,25,25],
+gunlength:[77,77,77],
+filling:"#4B0082",
+speed:[1,1.5,2.1],
+healthbarsize:100,
+initialhealth:enemyhealth,
+armor:[0,0,0],
+detectr1:[300,300,300],
+detectr2:[500,500,500],
+detectr3:[600,600,600],
+bodyturnrate:0.01,
+gunturnrate:0.01,
+dturretx:[17,17,17],
+dturrety:[17,17,17],
+dgunx:[2,2,2],
+dguny:[75,75,75],
+deyrotcen:[2,2,2]
+}
+}/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+{////obstacle constructor
+function obstacleconstruct(x,y,xsize,ysize){
+
+this.xcoord=x;
+this.ycoord=y;
+this.xsize=xsize;
+this.ysize=ysize;
+
+
+}
+
+obstacleconstruct.prototype={
+
+}
+
+
+}
+
+{//debree constructor
+function debreconstruct(obj){
+this.xcoord=obj.xcoord;
+this.ycoord=obj.ycoord;
+this.xsize=obj.xsize[obj.type];
+this.ysize=obj.ysize[obj.type];
+this.rotbody=obj.rotbody;
+this.xcen=obj.xcen;
+this.ycen=obj.ycen;
+this.timer=0;
+}
+}
+
+{////powerup construct////
+function powerupconstruct(obj){
+this.xcoord=obj.xcoord-25;
+this.ycoord=obj.ycoord;
+this.timer=0;
+this.flash=true;
+var type=Math.random();
+
+if(type<0.07){
+this.poweruptype="damage";
+}else if(type<0.14){
+this.poweruptype="speed";
+}else if(type<0.21){
+this.poweruptype="firerate"
+}else if(type<0.28){
+this.poweruptype="armor"
+}else{
+this.poweruptype="health"
+}
+}
+
+
+}
+
+
+function makeenemy(){
+for (var i=0;i<numofenemy;i++){
+var rand=Math.random();
+var type;
+if(rand<0.6){type=0;}else if(rand<0.9){type=1;}else{type=2;}
+enemy.push(new masterenemy(type));
+}
+}
+
+
+function drawimpact(arr){
+ctx.save();
+ctx.translate(arr[0]-22-canvaslocalx,arr[1]-30-canvaslocaly);
+ctx.scale(arr[2]/100*2.5,arr[2]/100*2.5)
+ctx.translate(-arr[0]+22+canvaslocalx,-arr[1]+30+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(impactclip[0][0]+arr[0]-canvaslocalx-22,impactclip[0][1]+arr[1]-canvaslocaly-30);
+for (var j=1;j<impactclip.length;j++){
+ ctx.lineTo(impactclip[j][0]+arr[0]-canvaslocalx-22,impactclip[j][1]+arr[1]-canvaslocaly-30);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(impact,arr[0]-canvaslocalx-22,arr[1]-canvaslocaly-30);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+}
+
+
+function baseradian(n){
+if (n<0){
+return ((n%(2*Math.PI))+(2*Math.PI));
+}else{
+return n%(2*Math.PI);
+}
+}
+
+function enemyAI(){
+
+for (var i=0;i<enemy.length;i++){
+if(enemy[i].alive===true){
+timer(enemy[i],100);
+
+enemy[i].xcen=enemy[i].xcoord+(enemy[i].xsize[enemy[i].type]/2);
+enemy[i].ycen=enemy[i].ycoord+(enemy[i].ysize[enemy[i].type]/2);
+enemy[i].xrotcen= ((0)*Math.cos(enemy[i].rotbody+(Math.PI/2)) - (enemy[i].deyrotcen[enemy[i].type])*Math.sin(enemy[i].rotbody+(Math.PI/2)))+enemy[i].xcen;
+enemy[i].yrotcen=((enemy[i].deyrotcen[enemy[i].type])*Math.cos(enemy[i].rotbody+(Math.PI/2)) +(0)*Math.sin(enemy[i].rotbody+(Math.PI/2)))+enemy[i].ycen;
+var dx=player.xcen-(enemy[i].xcen);
+var dy=player.ycen-(enemy[i].ycen);
+
+if(dx>0 ){
+var rot=Math.atan(dy/dx);
+}else if(dx<0){
+var rot=Math.PI+Math.atan(dy/dx);
+}
+
+var rotdiffbody=(baseradian(rot)-baseradian(enemy[i].rotbody));
+var rotdiffgun =(baseradian(rot)-baseradian(enemy[i].rotgun));
+var movetresh=0.2;
+
+var dist=Math.sqrt((enemy[i].xcen-player.xcen)*(enemy[i].xcen-player.xcen)+(enemy[i].ycen-player.ycen)*(enemy[i].ycen-player.ycen));
+
+if(dist < enemy[i].detectr3[enemy[i].type] && dist > enemy[i].detectr2[enemy[i].type]){
+///////////////////////////////////////////////////////////
+if(rotdiffbody > 0 && Math.abs(rotdiffbody) > Math.PI){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}else if( rotdiffbody >0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+};
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) > Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+  };
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}
+
+
+if(rotdiffgun > 0 && Math.abs(rotdiffgun) > Math.PI){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}else if( rotdiffgun >0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) > Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}
+///////////////////////////////////////////////////////
+}else if(dist < enemy[i].detectr2[enemy[i].type] && dist > enemy[i].detectr1[enemy[i].type]){
+///////////////////////////////////////////////////////////
+if(rotdiffbody > 0 && Math.abs(rotdiffbody) > Math.PI){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}else if( rotdiffbody >0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
+ enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+};
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) > Math.PI  ){
+enemy[i].rotbody+=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+  };
+}else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) < Math.PI  ){
+enemy[i].rotbody-=enemy[i].bodyturnrate;
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ };
+}
+
+if ( Math.abs(rotdiffgun)<Math.PI*0.05&& enemy[i].ready===true){
+var newenemybullet= new masterenemybullet(i);
+enemybullet.push(newenemybullet);
+enemy[i].ready=false;
+enemy[i].count=0;
+//playsound("gunfire");
+}
+
+if(rotdiffgun > 0 && Math.abs(rotdiffgun) > Math.PI){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}else if( rotdiffgun >0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) > Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}
+///////////////////////////////////////////////////////
+}else if(dist < enemy[i].detectr1[enemy[i].type]) {
+///////////////////////////////////////////////////////////
+
+if(rotdiffgun > 0 && Math.abs(rotdiffgun) > Math.PI){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}else if( rotdiffgun >0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) > Math.PI  ){
+enemy[i].rotgun+=enemy[i].gunturnrate;
+}else if(rotdiffgun<0 &&  Math.abs(rotdiffgun) < Math.PI  ){
+enemy[i].rotgun-=enemy[i].gunturnrate;
+}
+
+
+if ( Math.abs(rotdiffgun)<Math.PI*0.05&& enemy[i].ready===true){
+var newenemybullet= new masterenemybullet(i);
+enemybullet.push(newenemybullet);
+enemy[i].ready=false;
+enemy[i].count=0;
+//playsound("gunfire");
+}
+
+
+}
+///////////////////////////////////////////////////////
+
+if(enemy[i].xcen+(enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody))<=0 && enemy[i].xcen+(enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody))>=boundx && enemy[i].ycen+(enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody))<=0 && enemy[i].ycen+(enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody))>=boundy){  //checks boundary.
+enemy[i].xcoord-=(enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody));
+enemy[i].ycoord-=(enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody));
+///newdirection(enemy[i])
+}
+
+//////////
+}
+}
+}
+
+
+
+function drawenemy(){
+
+for (var i=0;i<enemy.length;i++){
+if(enemy[i].alive===true){
+ctx.save();
+ctx.translate(enemy[i].xcen-canvaslocalx,enemy[i].ycen-canvaslocaly);
+ctx.rotate(enemy[i].rotbody+(Math.PI/2));
+ctx.translate(-enemy[i].xcen+canvaslocalx,-enemy[i].ycen+canvaslocaly);
+
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemybodyclip[0][0]+enemy[i].xcoord-canvaslocalx,enemybodyclip[0][1]+enemy[i].ycoord-canvaslocaly);
+for (var j=1;j<enemybodyclip.length;j++){
+ ctx.lineTo(enemybodyclip[j][0]+enemy[i].xcoord-canvaslocalx,enemybodyclip[j][1]+enemy[i].ycoord-canvaslocaly);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+
+
+if(enemy[i].type===0){
+ctx.drawImage(enemybodygreen,enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly);
+}else if(enemy[i].type===1){
+ctx.drawImage(enemybodyred,enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly);
+}else{
+ctx.drawImage(enemybody,enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly);
+}
+
+ctx.restore();
+ctx.restore();
+//ctx.fillStyle=enemy[i].filling;
+//ctx.rect(enemy[i].xcoord-canvaslocalx,enemy[i].ycoord-canvaslocaly,enemy[i].xsize[enemy[i].type],enemy[i].ysize[enemy[i].type]);
+//ctx.fill();
+ctx.restore();
+///
+
+
+
+
+ctx.save();
+ctx.translate(enemy[i].xrotcen-canvaslocalx,enemy[i].yrotcen-canvaslocaly);
+ctx.rotate(enemy[i].rotgun+(Math.PI/2));
+ctx.translate(-enemy[i].xrotcen+canvaslocalx,-enemy[i].yrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemyturretclip[0][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemyturretclip[0][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+for (var j=1;j<enemyturretclip.length;j++){
+ ctx.lineTo(enemyturretclip[j][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemyturretclip[j][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+
+if(enemy[i].type===0){
+ctx.drawImage(enemyturretgreen,enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}else if(enemy[i].type===1){
+ctx.drawImage(enemyturretred,enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}else{
+ctx.drawImage(enemyturret,enemy[i].xrotcen-canvaslocalx-enemy[i].dturretx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dturrety[enemy[i].type]);
+}
+
+
+
+
+
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+
+
+
+///gun///
+ctx.save();
+ctx.translate(enemy[i].xrotcen-canvaslocalx,enemy[i].yrotcen-canvaslocaly);
+ctx.rotate(enemy[i].rotgun+(Math.PI/2));
+ctx.translate(-enemy[i].xrotcen+canvaslocalx,-enemy[i].yrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemygunclip[0][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemygunclip[0][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+for (var j=1;j<enemygunclip.length;j++){
+ ctx.lineTo(enemygunclip[j][0]+enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemygunclip[j][1]+enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+
+if(enemy[i].type===0){
+ctx.drawImage(enemygungreen,enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}else if(enemy[i].type===1){
+ctx.drawImage(enemygunred,enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}else{
+ctx.drawImage(enemygun,enemy[i].xrotcen-canvaslocalx-enemy[i].dgunx[enemy[i].type],enemy[i].yrotcen-canvaslocaly-enemy[i].dguny[enemy[i].type]);
+}
+
+
+
+
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+///
+
+
+///hp bar///
+ctx.save()
+ctx.fillStyle="#FF0000";
+ctx.beginPath();
+ctx.rect(enemy[i].xcoord-canvaslocalx-((enemy[i].healthbarsize/2)-(enemy[i].xsize[enemy[i].type]/2)),enemy[i].ycoord-canvaslocaly-60,enemy[i].healthbarsize,10);
+ctx.fill();
+ctx.restore()
+
+
+ctx.save()
+ctx.fillStyle="#008000";
+ctx.beginPath();
+ctx.rect(enemy[i].xcoord-canvaslocalx-((enemy[i].healthbarsize/2)-(enemy[i].xsize[enemy[i].type]/2)),enemy[i].ycoord-canvaslocaly-60,(enemy[i].health/enemy[i].initialhealth[enemy[i].type])*enemy[i].healthbarsize,10);
+ctx.fill();
+ctx.restore()
+///////
+
+
+}
+}
+}
+
+
+
+function makeobstacle(){
+var newO
+for (var i=0;i<10;i++){
+newO= new obstacleconstruct(Math.random()*boundx,Math.random()*boundy,400,400);
+obstacle.push(newO);
+}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function playercalc(){
+///moving the body
+
+timer(player,player.firerate);
+player.yspeed=player.gears[player.speed]*Math.sin((player.rot));///y player speed
+player.xspeed=player.gears[player.speed]*Math.cos((player.rot));///x player speed
+player.xcen=player.xcoord+(player.xsize/2);
+player.ycen=player.ycoord+(player.ysize/2);
+
+
+
+///local canvas frame///
+if(player.xcen>canvasx/2 && player.xcen<boundx-canvasx/2){  //checks boundary.
+canvaslocalx=player.xcen-(canvasx/2);
+}
+if(player.ycen>canvasy/2 && player.ycen<boundy-canvasy/2){
+canvaslocaly=player.ycen-(canvasy/2);
+}
+
+////
+if(player.xcen+player.xspeed>0 && player.xcen+player.xspeed<boundx && player.ycen+player.yspeed>0 && player.ycen+player.yspeed<boundy){  //checks boundary.
+player.xcoord+=player.xspeed;
+player.ycoord+=player.yspeed;
+}else{
+player.xcoord-=10*player.xspeed;
+player.ycoord-=10*player.yspeed;
+player.speed=1;
+}
+
+///
+
+///moving the turret center after body rotation
+player.gunxcoord=player.xcoord+(0.5*player.xsize)-(player.gunxsize/2);
+player.gunycoord=player.ycoord-(player.ysize)/7;
+var xrotcenold=(player.gunxcoord+(player.gunxsize/2));
+var yrotcenold=(player.gunycoord+player.gunysize);
+player.gunxrotcen=((xrotcenold-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (yrotcenold-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+player.gunyrotcen=((yrotcenold-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(xrotcenold-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+////
+//rotating turret////////
+var dx=mousepos[0]-(player.gunxrotcen-canvaslocalx);
+var dy=mousepos[1]-(player.gunyrotcen-canvaslocaly);
+
+if(dx>0 ){
+player.gunrot=(0.5*Math.PI)+Math.atan(dy/dx);
+}else if(dx<0){
+player.gunrot=((1.5)*Math.PI)+Math.atan(dy/dx);///make sure the x rot cen position is in local coordinates  before calc the gun rot
+}
+/////////////
+}
+
+function drawplayer(){
+///rect///
+ctx.save()
+ctx.translate(player.xcen-canvaslocalx,player.ycen-canvaslocaly);
+ctx.rotate(player.rot+(Math.PI/2));
+ctx.translate(-player.xcen+canvaslocalx,-player.ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(playerbodyclip[0][0]+player.xcoord-canvaslocalx,playerbodyclip[0][1]+player.ycoord-canvaslocaly);
+for (var i=1;i<playerbodyclip.length;i++){
+ ctx.lineTo(playerbodyclip[i][0]+player.xcoord-canvaslocalx,playerbodyclip[i][1]+player.ycoord-canvaslocaly);
+}
+ctx.clip();
+ctx.save()
+ctx.beginPath();
+ctx.drawImage(playerbody,player.xcoord-canvaslocalx,player.ycoord-canvaslocaly);
+ctx.restore();
+ctx.restore()
+ctx.restore();
+
+ctx.save();
+ctx.beginPath();
+ctx.translate(player.gunxrotcen-canvaslocalx,player.gunyrotcen-canvaslocaly);
+ctx.rotate(player.gunrot);
+ctx.translate(-player.gunxrotcen+canvaslocalx,-player.gunyrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(playerturretclip[0][0]+player.gunxrotcen-21-canvaslocalx,playerturretclip[0][1]+player.gunyrotcen-canvaslocaly-30);
+for (var i=1;i<playerturretclip.length;i++){
+ ctx.lineTo(playerturretclip[i][0]+player.gunxrotcen-21-canvaslocalx,playerturretclip[i][1]+player.gunyrotcen-canvaslocaly-30);
+}
+  ctx.clip();
+ctx.save()
+ctx.beginPath();
+ctx.drawImage(playerturret,player.gunxrotcen-21-canvaslocalx,player.gunyrotcen-canvaslocaly-30);
+ctx.restore();
+ctx.restore()
+ctx.restore();
+
+
+///turret///
+ctx.save();
+ctx.beginPath();
+ctx.translate(player.gunxrotcen-canvaslocalx,player.gunyrotcen-canvaslocaly);
+ctx.rotate(player.gunrot);
+ctx.translate(-player.gunxrotcen+canvaslocalx,-player.gunyrotcen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(playergunclip[0][0]+player.gunxrotcen-4-canvaslocalx,playergunclip[0][1]+player.gunyrotcen-canvaslocaly-60);
+for (var i=1;i<playergunclip.length;i++){
+ ctx.lineTo(playergunclip[i][0]+player.gunxrotcen-4-canvaslocalx,playergunclip[i][1]+player.gunyrotcen-canvaslocaly-60);
+}
+  ctx.clip();
+ctx.save()
+ctx.beginPath();
+ctx.drawImage(playergun,player.gunxrotcen-4-canvaslocalx,player.gunyrotcen-canvaslocaly-60);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+///player health bar///
+ctx.save();
+ctx.fillStyle="#FF0000";
+ctx.beginPath();
+
+ctx.rect(20,canvasy-45,300,25);
+
+ctx.fill();
+ctx.restore();
+
+
+ctx.save();
+ctx.fillStyle="#008000";
+ctx.beginPath();
+ctx.rect(20,canvasy-45,(player.health/player.ihealth)*300,25);
+ctx.fill();
+ctx.restore();
+////////
+
+
+////fire ready?
+ctx.save();
+if(player.ready===true){ ctx.fillStyle="#00FF00"; }else{ ctx.fillStyle="#800000";};
+ctx.beginPath();
+ctx.rect(340,canvasy-45,25,25);
+ctx.fill();
+ctx.restore();
+
+////
+}
+
+
+function drawobstacle(){
+for (var i=0;i<obstacle.length;i++){
+ctx.save();
+ctx.beginPath();
+ctx.fillStyle="#FFFF00";
+ctx.rect(obstacle[i].xcoord-canvaslocalx,obstacle[i].ycoord-canvaslocaly,obstacle[i].xsize,obstacle[i].ysize);
+ctx.fill();
+ctx.restore();
+}
+}
+
+function drawdebre(){
+for(var i=0;i<debre.length;i++){
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(debre[i].rotbody+(Math.PI/2));
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(enemybodyclip[0][0]+debre[i].xcoord-canvaslocalx,enemybodyclip[0][1]+debre[i].ycoord-canvaslocaly);
+for (var j=1;j<enemybodyclip.length;j++){
+ ctx.lineTo(enemybodyclip[j][0]+debre[i].xcoord-canvaslocalx,enemybodyclip[j][1]+debre[i].ycoord-canvaslocaly);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(enemybodyburned,debre[i].xcoord-canvaslocalx,debre[i].ycoord-canvaslocaly);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+////////////////fire/////////////////
+
+
+
+}
+}
+
+function drawpowerup(){
+for(var i=0;i<powerup.length;i++){
+ctx.save();
+ctx.beginPath();
+
+
+
+if(powerup[i].poweruptype==="damage"){
+if(powerup[i].flash===true){
+ctx.drawImage(damageb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(damagew,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype==="speed"){
+if(powerup[i].flash===true){
+ctx.drawImage(speedb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(speedw,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype==="firerate"){
+if(powerup[i].flash===true){
+ctx.drawImage(firerateb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(fireratew,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype==="armor"){
+if(powerup[i].flash===true){
+ctx.drawImage(armorb,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=false;
+}else{
+ctx.drawImage(armorw,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+powerup[i].flash=true;
+}
+}else if(powerup[i].poweruptype=="health"){
+ctx.drawImage(health,powerup[i].xcoord-canvaslocalx,powerup[i].ycoord-canvaslocaly);
+}
+
+
+ctx.restore();
+}
+}
+
+
+
+function draweffects(){
+
+for(var i=0;i<debre.length;i++){
+
+if(debre[i].timer<5){
+////fire/////
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*2*Math.PI);
+ctx.scale(2, 2);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(fireclip[0][0]+debre[i].xcoord-canvaslocalx-16,fireclip[0][1]+debre[i].ycoord-canvaslocaly+12);
+for (var j=1;j<fireclip.length;j++){
+ ctx.lineTo(fireclip[j][0]+debre[i].xcoord-canvaslocalx-16,fireclip[j][1]+debre[i].ycoord-canvaslocaly+12);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(fire,debre[i].xcoord-canvaslocalx-16,debre[i].ycoord-canvaslocaly+12);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+}else if (debre[i].timer<300){
+////fire/////
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*2*Math.PI);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(fireclip[0][0]+debre[i].xcoord-canvaslocalx-16,fireclip[0][1]+debre[i].ycoord-canvaslocaly+12);
+for (var j=1;j<fireclip.length;j++){
+ ctx.lineTo(fireclip[j][0]+debre[i].xcoord-canvaslocalx-16,fireclip[j][1]+debre[i].ycoord-canvaslocaly+12);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(fire,debre[i].xcoord-canvaslocalx-16,debre[i].ycoord-canvaslocaly+12);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+///////////smoke////////////////
+
+ctx.save()
+
+ctx.save();
+ctx.beginPath()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*0.005*Math.PI);
+ctx.scale((debre[i].timer/300), (debre[i].timer/300));
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.moveTo(smokeclip[0][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[0][1]+debre[i].ycoord-canvaslocaly-225);
+for (var j=1;j<smokeclip.length;j++){
+ ctx.lineTo(smokeclip[j][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[j][1]+debre[i].ycoord-canvaslocaly-225);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(smoke,debre[i].xcoord-canvaslocalx+16,debre[i].ycoord-canvaslocaly-225);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+}else{
+////fire/////
+ctx.save()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*2*Math.PI);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.save();
+ctx.beginPath()
+ctx.moveTo(fireclip[0][0]+debre[i].xcoord-canvaslocalx-16,fireclip[0][1]+debre[i].ycoord-canvaslocaly+12);
+for (var j=1;j<fireclip.length;j++){
+ ctx.lineTo(fireclip[j][0]+debre[i].xcoord-canvaslocalx-16,fireclip[j][1]+debre[i].ycoord-canvaslocaly+12);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(fire,debre[i].xcoord-canvaslocalx-16,debre[i].ycoord-canvaslocaly+12);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+///////////smoke////////////////
+
+ctx.save()
+
+ctx.save();
+ctx.beginPath()
+ctx.translate(debre[i].xcen-canvaslocalx,debre[i].ycen-canvaslocaly);
+ctx.rotate(Math.random()*0.005*Math.PI);
+ctx.translate(-debre[i].xcen+canvaslocalx,-debre[i].ycen+canvaslocaly);
+ctx.moveTo(smokeclip[0][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[0][1]+debre[i].ycoord-canvaslocaly-225);
+for (var j=1;j<smokeclip.length;j++){
+ ctx.lineTo(smokeclip[j][0]+debre[i].xcoord-canvaslocalx+16,smokeclip[j][1]+debre[i].ycoord-canvaslocaly-225);
+}
+ ctx.clip();
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(smoke,debre[i].xcoord-canvaslocalx+16,debre[i].ycoord-canvaslocaly-225);
+ctx.restore();
+ctx.restore();
+ctx.restore();
+
+
+}
+
+if (debre[i].timer<300){
+debre[i].timer+=1;
+}
+}
+
+
+impactarr.forEach(drawimpact)
+
+impactarr=[];
+
+
+}
+
+
+function drawbullet(){
+for (var i=0;i<bullet.length;i++){
+ctx.save();
+ctx.beginPath();
+ctx.fillStyle=bullet[i].filling;
+
+for (var j=0;j<bullet[i].trace;j++){
+ctx.arc(bullet[i].xcoord-canvaslocalx-(j/10)*(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord-canvaslocaly-(j/10)*(bullet[i].ypath*bullet[i].speed),bullet[i].size,0,2*Math.PI,false);
+}
+
+ctx.fill();
+bullet[i].xcoord+=(bullet[i].xpath*bullet[i].speed)+bullet[i].playerxspeed;
+bullet[i].ycoord+=(bullet[i].ypath*bullet[i].speed)+bullet[i].playeryspeed;
+ctx.restore();
+if(bullet[i].trace<50){
+bullet[i].trace+=10;
+}
+
+}
+}
+
+function drawenemybullet(){
+for (var i=0;i<enemybullet.length;i++){
+ctx.save();
+ctx.beginPath();
+ctx.fillStyle=enemybullet[i].filling;
+for (var j=0;j<enemybullet[i].trace;j++){
+ctx.arc(enemybullet[i].xcoord-canvaslocalx-(j/10)*(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord-canvaslocaly-(j/10)*(enemybullet[i].ypath*enemybullet[i].speed),enemybullet[i].size,0,2*Math.PI,false);
+}
+
+ctx.fill();
+enemybullet[i].xcoord+=(enemybullet[i].xpath*enemybullet[i].speed);
+enemybullet[i].ycoord+=(enemybullet[i].ypath*enemybullet[i].speed);
+ctx.restore();
+
+if(enemybullet[i].trace<50){
+enemybullet[i].trace+=10;
+}
+
+}
+}
+
+function keyDownHandler(e){
+ if(e.keyCode == 68) {//d
+	player.rot+=player.turnrate;
+    }
+
+    else if(e.keyCode == 65) {//a
+	player.rot-=player.turnrate;
+	
+    }
+	 else if(e.keyCode == 87) {
+	 if(player.speed<3){        
+        player.speed+=1;				
+		}
+    }
+	 else if(e.keyCode == 83) {
+	 if(player.speed>0){       
+		player.speed-=1;		
+		}
+    }	 else if(e.keyCode == 32) {
+	 
+	menu=1;
+
+	}else if(e.keyCode == 84) {
+	 if (menu!=1){
+	menu=3;
+}
+	}
+}
+
+function drawbackground(){
+ctx.save();
+    ctx.drawImage(background,-canvaslocalx,-canvaslocaly);
+		ctx.restore();
+}
+
+function mouseMove(e){//gives local canvas location of mouse
+mousepos[0]=(e.clientX-canvasleft); 
+mousepos[1]=(e.clientY-canvastop);
+}
+
+function mouseclick(e){
+
+if(player.ready===true){
+player.ready=false;
+player.fire=true;
+player.timer=0;
+var newbullet= new masterbullet;
+bullet.push(newbullet);
+playsound("gunfire");
+}
+
+}
+
+function checkbullet(){
+for (var i=0;i<bullet.length;i++){
+if(bullet[i].xcoord < (bullet[i].size/2) ||   bullet[i].xcoord  > boundx-(bullet[i].size/2)  || bullet[i].ycoord  < (bullet[i].size/2) || bullet[i].ycoord > boundy-(bullet[i].size/2)  )
+{
+bullet.splice(i,1);
+i--;
+}
+}
+
+for (var j=0;j<enemybullet.length;j++){
+if(enemybullet[j].xcoord < (enemybullet[j].size/2) ||   enemybullet[j].xcoord  > boundx-(enemybullet[j].size/2)  || enemybullet[j].ycoord  < (enemybullet[j].size/2) || enemybullet[j].ycoord > boundy-(enemybullet[j].size/2)  )
+{
+enemybullet.splice(j,1);
+j--;
+}
+}
+
+
+}
+
+
+function checkobstacle(){
+////check playerenemy bump///
+for (var i=0;i<enemy.length;i++){
+if(enemy[i].alive===true){
+if(Math.sqrt((enemy[i].xcen-player.xcen)*(enemy[i].xcen-player.xcen)+(enemy[i].ycen-player.ycen)*(enemy[i].ycen-player.ycen))<=( (Math.sqrt((player.xsize*player.xsize)+(player.ysize*player.ysize))/2) + (Math.sqrt((enemy[i].xsize[enemy[i].type]*enemy[i].xsize[enemy[i].type])+(enemy[i].ysize[enemy[i].type]*enemy[i].ysize[enemy[i].type]))/2))/1.5){
+player.xcoord-=5*player.xspeed;
+player.ycoord-=5*player.yspeed;
+player.speed=1;
+enemy[i].xcoord-=5*enemy[i].speed[enemy[i].type]*Math.cos((enemy[i].rotbody));
+enemy[i].ycoord-=5*enemy[i].speed[enemy[i].type]*Math.sin((enemy[i].rotbody));
+
+}
+}
+}
+
+for (var i=0;i<debre.length;i++){
+if(Math.sqrt((debre[i].xcen-player.xcen)*(debre[i].xcen-player.xcen)+(debre[i].ycen-player.ycen)*(debre[i].ycen-player.ycen))<=( (Math.sqrt((player.xsize*player.xsize)+(player.ysize*player.ysize))/2) + (Math.sqrt((debre[i].xsize*debre[i].xsize)+(debre[i].ysize*debre[i].ysize))/2)/1.5   ) ){
+player.xcoord-=5*player.xspeed;
+player.ycoord-=5*player.yspeed;
+player.speed=1;
+debre[i].xcoord+=5*player.xspeed;
+debre[i].ycoord+=5*player.yspeed;
+debre[i].xcen+=5*player.xspeed;
+debre[i].ycen+=5*player.yspeed;
+}
+}
+
+for (var i=0;i<powerup.length;i++){
+if(powerup[i].xcoord<player.xcen&&powerup[i].xcoord+100>player.xcen&&powerup[i].ycoord<player.ycen&&powerup[i].ycoord+100>player.ycen){
+if(powerup[i].poweruptype==="damage" &&score.damage<4){
+score.damage+=1;
+powerup.splice(i,1)
+player.gun1damage+=25;
+}else if(powerup[i].poweruptype==="speed"&&score.speed<4){
+score.speed+=1;
+powerup.splice(i,1)
+
+player.gears.forEach(function(a){a=a*1.5; });
+
+
+}else if(powerup[i].poweruptype==="firerate"&&score.firerate<4){
+score.firerate+=1;
+powerup.splice(i,1)
+player.firerate-=20;
+
+}else if(powerup[i].poweruptype==="armor"&&score.armor<4){
+score.armor+=1;
+powerup.splice(i,1)
+player.armor+=3;
+}else if(powerup[i].poweruptype==="health"&&player.health+30<100){
+player.health+=30;
+powerup.splice(i,1)
+}else if(powerup[i].poweruptype==="health"&&player.health+30>=100){
+player.health=100;
+powerup.splice(i,1)
+}else{
+powerup.splice(i,1)
+}
+}
+}
+
+
+}
+
+function isinsiderect(ptx,pty,rectx,recty){
+var calcx=[];
+
+var j=rectx.length-1;
+for (var i=0;i<rectx.length;i++){
+if ((pty<recty[i]&&pty>recty[j] ) || (pty<recty[j]&&pty>recty[i]) ){
+  
+ 
+calcx.push(rectx[i]+((pty-recty[i])*((rectx[j]-rectx[i])/(recty[j]-recty[i])))); 
+
+}
+j=i
+}
+
+console.log(calcx[0]+" "+calcx[1])
+if ((ptx<calcx[0] && ptx > calcx[1]) || (ptx>calcx[0] && ptx< calcx[1])){
+return true
+}else{
+return false
+}
+
+}
+
+function playerbulletcollison(){
+var topleftx;
+var toprightx;
+var botrightx;
+var botleftx;
+var toplefty;
+var toprighty;
+var botrighty;
+var botlefty;
+
+
+for(var j=0;j<enemy.length;j++){
+for(var i=0;i<bullet.length;i++){
+
+if(enemy[j].alive===true){
+if (Math.sqrt((enemy[j].xcen-bullet[i].xcoord)*(enemy[j].xcen-bullet[i].xcoord)+(enemy[j].ycen-bullet[i].ycoord)*(enemy[j].ycen-bullet[i].ycoord))< Math.sqrt((enemy[j].xsize[enemy[j].type]*enemy[j].xsize[enemy[j].type])+(enemy[j].ysize[enemy[j].type]*enemy[j].ysize[enemy[j].type])  )/2)  {
+
+topleftx=((enemy[j].xcoord-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+toprightx=((enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+botrightx=((enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+botleftx=((enemy[j].xcoord-enemy[j].xcen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) - (enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].xcen;
+toplefty= ((enemy[j].ycoord-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+toprighty=((enemy[j].ycoord-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+botrighty=((enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord+enemy[j].xsize[enemy[j].type]-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+botlefty=((enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
+
+
+if ( isinsiderect(bullet[i].xcoord-(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord-(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) || 
+isinsiderect(bullet[i].xcoord,bullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) 
+||isinsiderect(bullet[i].xcoord+(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord+(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ){
+if (enemy[j].health-(player.gun1dmg-enemy[j].armor[enemy[j].type])<=0){
+if(Math.random()>0.8){
+powerup.push(new powerupconstruct(enemy[j]));
+}else{
+debre.push(new debreconstruct(enemy[j]));
+}
+
+
+enemy[j].alive=false;
+bullet.splice(i,1);
+
+playsound("kill")
+
+
+//j--;
+//break
+}else{
+enemy[j].health-=(player.gun1dmg-enemy[j].armor[enemy[j].type]);
+impactarr.push([Math.min(bullet[i].xcoord),Math.min(bullet[i].ycoord)]);
+bullet.splice(i,1);
+i--;
+
+playsound("hit")
+}
+}
+}
+}
+}
+}
+}
+/////////////////////////////////
+
+function enemybulletcollison(){//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+var topleftx;
+var toprightx;
+var botrightx;
+var botleftx;
+var toplefty;
+var toprighty;
+var botrighty;
+var botlefty;
+
+
+for(var i=0;i<enemybullet.length;i++){
+
+
+
+
+if (Math.sqrt((player.xcen-enemybullet[i].xcoord)*(player.xcen-enemybullet[i].xcoord)+(player.ycen-enemybullet[i].ycoord)*(player.ycen-enemybullet[i].ycoord))< Math.sqrt((player.xsize*player.xsize)+(player.ysize*player.ysize)  )/2)  {
+
+topleftx=((player.xcoord-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+toprightx=((player.xcoord+player.xsize-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+botrightx=((player.xcoord+player.xsize-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord+player.ysize-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+botleftx=((player.xcoord-player.xcen)*Math.cos(player.rot+(Math.PI/2)) - (player.ycoord+player.ysize-player.ycen)*Math.sin(player.rot+(Math.PI/2)))+player.xcen;
+toplefty= ((player.ycoord-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+toprighty=((player.ycoord-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord+player.xsize-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+botrighty=((player.ycoord+player.ysize-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord+player.xsize-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+botlefty=((player.ycoord+player.ysize-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
+
+if ( isinsiderect(enemybullet[i].xcoord-(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord-(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) || 
+isinsiderect(enemybullet[i].xcoord,enemybullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) 
+||isinsiderect(enemybullet[i].xcoord+(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord+(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ){
+
+
+
+if (enemybullet[i].gundmg-player.armor>0){
+if (player.health-(enemybullet[i].gundmg-player.armor)<=0){
+
+menu=2;
+   
+}else{
+player.health-=(enemybullet[i].gundmg-player.armor);
+}
+
+
+}
+impactarr.push([Math.min(enemybullet[i].xcoord),Math.min(enemybullet[i].ycoord)]);
+enemybullet.splice(i,1);
+i--;
+playsound("hit");
+}
+
+}
+}
+}
+
+function timer(obj,timelength){
+if(obj.count<timelength && obj.ready===false){
+obj.count+=1;
+}
+else if(obj.count>=timelength &&obj.ready===false){
+obj.ready=true;
+obj.count=0;
+}
+}
+
+{//listeners///////////////////////////
+//document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("mousemove", mouseMove, false);
+document.addEventListener("click", mouseclick, false);
+}//////////////////////////////////////////////////////
+
+function write(){	
+ctx.save()	 
+ctx.font="20px Georgia";
+ctx.fillText(  "Debug: "+impactarr[0] ,20,20);
+ctx.fillText(   "deg",20,50);
+ctx.restore()
+
+
+
+ctx.save()
+ctx.fillStyle="#1E90FF";
+ctx.font="40px Georgia";
+ctx.fillText(  "Level "+level ,1120,40);
+ctx.restore()
+
+
+
+
+ctx.save()
+ctx.fillStyle="#696969";
+ctx.font="25px Georgia";
+ctx.fillText(  "Damage Level: "+score.damage ,500,canvasy-30);
+ctx.restore()
+
+
+
+
+
+
+ctx.save()
+ctx.fillStyle="#000080";
+ctx.font="25px Georgia";
+ctx.fillText(  "Speed Level: "+score.speed,700,canvasy-30);
+ctx.restore()
+
+ctx.save()
+ctx.fillStyle="#7CFC00";
+ctx.font="25px Georgia";
+ctx.fillText(  "Fire Rate Level: "+score.firerate ,890,canvasy-30);
+ctx.restore()
+
+ctx.save()
+ctx.fillStyle="#FF6347";
+ctx.font="25px Georgia";
+ctx.fillText(  "Armor: "+score.armor ,1120,canvasy-30);
+ctx.restore()
+
+
+
+}
+
+
+function playsound(type){ 
+
+if(type==="gunfire"){
+gunfire.currentTime=0;
+gunfire.play();
+}else if(type==="hit"){
+var rand=Math.random();
+if(rand<0.33){
+hitsound[0].currentTime=0;
+hitsound[0].play();
+}else if(rand<0.66){
+hitsound[1].currentTime=0;
+hitsound[1].play();
+
+}else{
+hitsound[2].currentTime=0;
+hitsound[2].play();
+
+}
+}else if(type==="kill"){
+var rand=Math.random();
+if(rand<0.33){
+killsound[0].currentTime=0;
+killsound[0].play();
+}else if(rand<0.66){
+killsound[1].currentTime=0;
+killsound[1].play();
+
+}else{
+killsound[2].currentTime=0;
+killsound[2].play();
+}
+}
+};
+
+function levelcheck(){
+
+    var alive=0;
+enemy.forEach(function(a){ if(a.alive===true) {alive+=1}      }  )  
+if(alive===0){
+
+initialize();
+makeenemy();
+//setInterval(draw,10)
+//requestAnimationFrame(draw);
+    
+}
+}
+
+function initialize(){
+
+numofenemy+=3;//number of enemy on screen
+bullet=[];//array containing bullet fired by player
+enemybullet=[];//array containing bullet fired by enemy
+enemy=[];//array containing enemy tanks
+powerup=[];
+impactarr=[];
+debre=[];
+player.health=100;
+level+=1;
+
+
+
+}
+
+
+
+function draw(){
+
+if (menu===0){
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(menugraphic,0,0);
+ctx.restore();
+requestAnimationFrame(draw);
+}else if(menu===3){
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(tutorial,0,0);
+ctx.restore();
+requestAnimationFrame(draw);
+}else if(menu===1){
+levelcheck();
+player.rot=baseradian(player.rot);
+enemyAI();
+playercalc();
+checkbullet();
+checkobstacle();
+playerbulletcollison();
+enemybulletcollison();
+drawbackground();
+drawdebre();
+drawbullet();
+drawenemybullet();
+drawenemy();
+drawplayer();
+draweffects();
+drawpowerup();
+write();
+requestAnimationFrame(draw);
+}else if (menu===2){
+
+initialize();
+numofenemy=3;
+level=1;
+canvaslocalx=0;//x coord of top left of canvas relative to full map.
+canvaslocaly=0;
+score={damage:1,armor:1,firerate:1,speed:1};
+player={xcoord:300,ycoord:300,xsize:47,ysize:100,filling:"#0095DD",rot:0,speed:1,turnrate:0.05*Math.PI,health:100,ihealth:100,gun1dmg:25,gears:[-0.5,0,1,2],firerate:100,armor:0,count:0,ready:true,gunxcoord:undefined,gunycoord:undefined,gunxsize:5,gunysize:60,gunfilling:"#cc00ff",gunrot:0,fire:false};
+makeenemy();
+
+
+
+
+ctx.save();
+ctx.beginPath();
+ctx.drawImage(gameovergraphic,0,0);
+ctx.restore();
+requestAnimationFrame(draw);
+
+}
+}
+
+makeenemy();
+draw();
+//setInterval(draw,10)
+
+
+
+
+
+</script>
+
+</body>
+</html>
