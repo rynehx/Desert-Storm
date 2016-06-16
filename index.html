@@ -23,7 +23,7 @@ tutorial.src = "Tutorial.bmp";
 var gameovergraphic=new Image();
 gameovergraphic.src = "gameovergraphic.bmp";
 var background=new Image();
-background.src = "backgroundimg.bmp";
+background.src = "https://s3-us-west-1.amazonaws.com/desertstorm/backgroundimg.bmp";
 var canvas=document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 var playerturret=new Image();
@@ -31,7 +31,7 @@ playerturret.src = "playerturret.bmp";
 var playerbody=new Image();
 playerbody.src = "playerbody.bmp";
 var playergun=new Image();
-playergun.src = "playergun.bmp";  
+playergun.src = "playergun.bmp";
 var enemygun=new Image();
 enemygun.src = "enemygun.bmp";
 var enemyturret=new Image();
@@ -43,9 +43,9 @@ enemybodyburned.src="enemybodyburned.bmp";
 var fire=new Image();
 fire.src="fire.bmp";
 var smoke=new Image();
-smoke.src="smoke.bmp";  
+smoke.src="smoke.bmp";
 var impact=new Image();
-impact.src="impact.bmp";  
+impact.src="impact.bmp";
 var playerturretclip=[[15,0],[0,9],[0,27],[4,59],[39,59],[43,27],[43,9],[28,0]];
 var playerbodyclip=[[0,0],[0,96],[10,96],[10,99],[37,99],[37,96],[47,96],[47,0]];
 var playergunclip=[[3,0],[2,1],[2,11],[1,11],[1,16],[2,16],[2,26],[2,28],[0,32],[7,32],[7,28],[5,26],[5,16],[6,16],[6,11],[5,11],[5,1],[4,0]];
@@ -62,14 +62,14 @@ var smokeclip=[[160,2],[148,8],[144,9],[132,26],[121,33],[113,46],[106,53],[101,
 [115,208],[120,205],[122,196],[135,188],[158,189],[178,163],[198,163],[206,156],[210,142],[224,135],[235,106],
 [238 ,90],[255,73],[257,56],[265,41],[264,36],[254,28],[254,12],[248,7],[239,5],[207,5],[196,9],[185,5],[169,5]];
  var impactclip=[[27,0],[28,12],[22,8],[20,14],[16,12],[2,9],[10,14],[8,19],[11,25],[7,29],[8,34],[0,44],[0,49],[11,40],[14,50],[21,47],[24,49],[30,62],[31,52],[34,45],[45,51],[44,44],[49,40],[43,32],[50,30],[50,27],[61,22],[63,18],[53,19],[41,16],[38,12],[34,4]];
- 
- 
+
+
 var enemygungreen=new Image();
 enemygungreen.src = "enemygungreen.bmp";
 var enemyturretgreen=new Image();
 enemyturretgreen.src = "enemyturretgreen.bmp";
 var enemybodygreen=new Image();
-enemybodygreen.src = "enemybodygreen.bmp";  
+enemybodygreen.src = "enemybodygreen.bmp";
 var enemygunred=new Image();
 enemygunred.src = "enemygunred.bmp";
 var enemyturretred=new Image();
@@ -77,33 +77,33 @@ enemyturretred.src = "enemyturretred.bmp";
 var enemybodyred=new Image();
 enemybodyred.src = "enemybodyred.bmp";
 var armorb=new Image();
-armorb.src="armorb.bmp";  
+armorb.src="armorb.bmp";
 var armorw=new Image();
-armorw.src="armorw.bmp";    
+armorw.src="armorw.bmp";
 var damageb=new Image();
-damageb.src="damageb.bmp";  
+damageb.src="damageb.bmp";
 var damagew=new Image();
-damagew.src="damagew.bmp";   
+damagew.src="damagew.bmp";
 var speedb=new Image();
-speedb.src="speedb.bmp";  
+speedb.src="speedb.bmp";
 var speedw=new Image();
-speedw.src="speedw.bmp";    
+speedw.src="speedw.bmp";
 var firerateb=new Image();
-firerateb.src="firerateb.bmp";  
+firerateb.src="firerateb.bmp";
 var fireratew=new Image();
-fireratew.src="fireratew.bmp";    
+fireratew.src="fireratew.bmp";
 var health=new Image();
-health.src="health.bmp";  
-var gunfire = new Audio("gunfire.wav"); 
+health.src="health.bmp";
+var gunfire = new Audio("gunfire.wav");
 hitsound=[new Audio("hit1.wav"),new Audio("hit2.wav"),new Audio("hit3.wav")]
 killsound=[new Audio("kill1.wav"),new Audio("kill2.wav"),new Audio("kill3.wav")]
 var inferno = new Audio("inferno.wav");
-var move = new Audio("move.wav"); 
+var move = new Audio("move.wav");
 
 
 
   }////////
- 
+
 {//Inital Variables//
 var menu=0;
 var player={xcoord:300,ycoord:300,xsize:47,ysize:100,filling:"#0095DD",rot:0,speed:1,turnrate:0.05*Math.PI,health:100,ihealth:100,gun1dmg:25,gears:[-0.5,0,1,2],firerate:100,armor:0,count:0,ready:true,gunxcoord:undefined,gunycoord:undefined,gunxsize:5,gunysize:60,gunfilling:"#cc00ff",gunrot:0,fire:false};//player object
@@ -248,7 +248,7 @@ enemy.push(new masterenemy(type));
 }
 }
 
-function drawimpact(arr){//draws the impact of bullets hitting tanks 
+function drawimpact(arr){//draws the impact of bullets hitting tanks
 ctx.save();
 ctx.translate(arr[0]-22-canvaslocalx,arr[1]-30-canvaslocaly);
 ctx.scale(arr[2]/100*2.5,arr[2]/100*2.5)
@@ -309,7 +309,7 @@ var rot=Math.PI+Math.atan(dy/dx);
 
 var rotdiffbody=(baseradian(rot)-baseradian(enemy[i].rotbody));//this determines the angle difference between current enemy body orientation and the angle the enemy is oriented to the player
 var rotdiffgun =(baseradian(rot)-baseradian(enemy[i].rotgun));//this determines the angle difference between current enemy gun orientation and the angle the enemy is oriented to the player
-var movetresh=0.2; //this is the angle tolerance the enemy is allowed to start moving and chase after the player 
+var movetresh=0.2; //this is the angle tolerance the enemy is allowed to start moving and chase after the player
 
 var dist=Math.sqrt((enemy[i].xcen-player.xcen)*(enemy[i].xcen-player.xcen)+(enemy[i].ycen-player.ycen)*(enemy[i].ycen-player.ycen));//absolute distance between player and enemy[i]
 
@@ -319,25 +319,25 @@ if(rotdiffbody > 0 && Math.abs(rotdiffbody) > Math.PI){
 enemy[i].rotbody-=enemy[i].bodyturnrate;
 if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
  enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
- enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
  };
 }else if( rotdiffbody >0 &&  Math.abs(rotdiffbody) < Math.PI  ){
 enemy[i].rotbody+=enemy[i].bodyturnrate;
 if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
  enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
- enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
 };
 }else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) > Math.PI  ){
 enemy[i].rotbody+=enemy[i].bodyturnrate;
-if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
 enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
-  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
   };
 }else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) < Math.PI  ){
 enemy[i].rotbody-=enemy[i].bodyturnrate;
-if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
 enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
- enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
  };
 }
 
@@ -358,29 +358,29 @@ if(rotdiffbody > 0 && Math.abs(rotdiffbody) > Math.PI){
 enemy[i].rotbody-=enemy[i].bodyturnrate;
 if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
  enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
- enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
  };
 }else if( rotdiffbody >0 &&  Math.abs(rotdiffbody) < Math.PI  ){
 enemy[i].rotbody+=enemy[i].bodyturnrate;
 if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
  enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
- enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
 };
 }else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) > Math.PI  ){
 enemy[i].rotbody+=enemy[i].bodyturnrate;
-if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
 enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
-  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+  enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
   };
 }else if(rotdiffbody<0 &&  Math.abs(rotdiffbody) < Math.PI  ){
 enemy[i].rotbody-=enemy[i].bodyturnrate;
-if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){ 
+if(Math.abs(rotdiffbody)<(Math.PI*movetresh)){
 enemy[i].xcoord+=enemy[i].speed[enemy[i].type]*Math.cos(enemy[i].rotbody);
- enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);  
+ enemy[i].ycoord+=enemy[i].speed[enemy[i].type]*Math.sin(enemy[i].rotbody);
  };
 }
 
-if ( Math.abs(rotdiffgun)<Math.PI*0.05&& enemy[i].ready===true){ //if enemy gun orientation is within 0.05*Pi of facing player center then it fires buy pushing a newly constructed enemy bullet to the enemy bullet array 
+if ( Math.abs(rotdiffgun)<Math.PI*0.05&& enemy[i].ready===true){ //if enemy gun orientation is within 0.05*Pi of facing player center then it fires buy pushing a newly constructed enemy bullet to the enemy bullet array
 var newenemybullet= new masterenemybullet(i);
 enemybullet.push(newenemybullet);
 enemy[i].ready=false;//this says that this enemy is reloading
@@ -457,7 +457,7 @@ player.speed=1; //this is the gear index not the actual speed value. gear is an 
 
 ///
 
-///moving the turret center after body rotation// if the gun/turret center does not coincide with the center of body then the center of gun/turret shifts if the player body rotates. this calculates the location 
+///moving the turret center after body rotation// if the gun/turret center does not coincide with the center of body then the center of gun/turret shifts if the player body rotates. this calculates the location
 player.gunxcoord=player.xcoord+(0.5*player.xsize)-(player.gunxsize/2);
 player.gunycoord=player.ycoord-(player.ysize)/7;
 var xrotcenold=(player.gunxcoord+(player.gunxsize/2));
@@ -939,22 +939,22 @@ function keyDownHandler(e){//determines what to do when certain keys are pressed
 
     else if(e.keyCode == 65) {//a
 	player.rot-=player.turnrate; //turns player
-	
+
     }
 	 else if(e.keyCode == 87) {
-	 if(player.speed<3){        
+	 if(player.speed<3){
         player.speed+=1;		 //shift up gear
 		}
     }
 	 else if(e.keyCode == 83) {
 	 if(player.speed>0){       //shift down gear
-		player.speed-=1;		
+		player.speed-=1;
 		}
     }	 else if(e.keyCode == 32) {
-	 
+
 	menu=1; //space to start or restart game
 
-	}else if(e.keyCode == 84) { 
+	}else if(e.keyCode == 84) {
 	 if (menu!=1){//t to access tutorial but not during game play
 	menu=3;
 }
@@ -968,7 +968,7 @@ ctx.save();
 }
 
 function mouseMove(e){//gives local canvas location of mouse
-mousepos[0]=(e.clientX-canvasleft); 
+mousepos[0]=(e.clientX-canvasleft);
 mousepos[1]=(e.clientY-canvastop);
 }
 
@@ -1073,9 +1073,9 @@ var calcx=[];
 var j=rectx.length-1;
 for (var i=0;i<rectx.length;i++){
 if ((pty<recty[i]&&pty>recty[j] ) || (pty<recty[j]&&pty>recty[i]) ){
-  
- 
-calcx.push(rectx[i]+((pty-recty[i])*((rectx[j]-rectx[i])/(recty[j]-recty[i])))); 
+
+
+calcx.push(rectx[i]+((pty-recty[i])*((rectx[j]-rectx[i])/(recty[j]-recty[i]))));
 
 }
 j=i
@@ -1120,8 +1120,8 @@ botrighty=((enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.co
 botlefty=((enemy[j].ycoord+enemy[j].ysize[enemy[j].type]-enemy[j].ycen)*Math.cos(enemy[j].rotbody+(Math.PI/2)) +(enemy[j].xcoord-enemy[j].xcen)*Math.sin(enemy[j].rotbody+(Math.PI/2)))+enemy[j].ycen;
 
 
-if ( isinsiderect(bullet[i].xcoord-(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord-(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) || 
-isinsiderect(bullet[i].xcoord,bullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) 
+if ( isinsiderect(bullet[i].xcoord-(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord-(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ||
+isinsiderect(bullet[i].xcoord,bullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty])
 ||isinsiderect(bullet[i].xcoord+(bullet[i].xpath*bullet[i].speed),bullet[i].ycoord+(bullet[i].ypath*bullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ){
 if (enemy[j].health-(player.gun1dmg-enemy[j].armor[enemy[j].type])<=0){//if enemy is hit and its health is below zero then enemy alive staus is set to false and a powerup may drop.
 if(Math.random()>0.5){//50% chance of power up drop
@@ -1139,7 +1139,7 @@ playsound("kill")
 
 //j--;
 //break
-}else{// if enemy is hit the bullet is deleted and enemy health is reduced by the damage of the player bullet. 
+}else{// if enemy is hit the bullet is deleted and enemy health is reduced by the damage of the player bullet.
 enemy[j].health-=(player.gun1dmg-enemy[j].armor[enemy[j].type]);//Impact is created to animate the impact
 impactarr.push([Math.min(bullet[i].xcoord),Math.min(bullet[i].ycoord)]);
 bullet.splice(i,1); //the bullet is deleted
@@ -1182,8 +1182,8 @@ toprighty=((player.ycoord-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player
 botrighty=((player.ycoord+player.ysize-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord+player.xsize-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
 botlefty=((player.ycoord+player.ysize-player.ycen)*Math.cos(player.rot+(Math.PI/2)) +(player.xcoord-player.xcen)*Math.sin(player.rot+(Math.PI/2)))+player.ycen;
 
-if ( isinsiderect(enemybullet[i].xcoord-(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord-(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) || 
-isinsiderect(enemybullet[i].xcoord,enemybullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) 
+if ( isinsiderect(enemybullet[i].xcoord-(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord-(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ||
+isinsiderect(enemybullet[i].xcoord,enemybullet[i].ycoord,[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty])
 ||isinsiderect(enemybullet[i].xcoord+(enemybullet[i].xpath*enemybullet[i].speed),enemybullet[i].ycoord+(enemybullet[i].ypath*enemybullet[i].speed),[topleftx,toprightx,botrightx,botleftx],[toplefty,toprighty,botrighty,botlefty]) ){
 
 
@@ -1192,8 +1192,8 @@ if (enemybullet[i].gundmg-player.armor>0){//if player armor is greater than the 
 if (player.health-(enemybullet[i].gundmg-player.armor)<=0){//if player health is below zero then it goes to the game over menu
 
 menu=2;
-   
-}else{//if bullet hit player then player health is reduced. 
+
+}else{//if bullet hit player then player health is reduced.
 player.health-=(enemybullet[i].gundmg-player.armor);
 }
 
@@ -1286,7 +1286,7 @@ killsound[2].play();
 
 function levelcheck(){//checks if all enemy is dead, if so then start next level
 var alive=0;
-enemy.forEach(function(a){if(a.alive===true) {alive+=1}})  
+enemy.forEach(function(a){if(a.alive===true) {alive+=1}})
 if(alive===0){
 
 initialize();
@@ -1294,7 +1294,7 @@ makeenemy();
 
 
 
-    
+
 }
 }
 
