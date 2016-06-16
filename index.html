@@ -13,39 +13,37 @@
 <canvas id="myCanvas" width="1300" height="750"></canvas>
 
 <script>
-
-
 {////load images and sounds/////
 var menugraphic=new Image();
-menugraphic.src = "menugraphic.bmp";
+menugraphic.src = "./texture/menugraphic.bmp";
 var tutorial=new Image();
-tutorial.src = "Tutorial.bmp";
+tutorial.src = "./texture/Tutorial.bmp";
 var gameovergraphic=new Image();
-gameovergraphic.src = "gameovergraphic.bmp";
+gameovergraphic.src = "./texture/gameovergraphic.bmp";
 var background=new Image();
 background.src = "https://s3-us-west-1.amazonaws.com/desertstorm/backgroundimg.bmp";
 var canvas=document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 var playerturret=new Image();
-playerturret.src = "playerturret.bmp";
+playerturret.src = "./texture/playerturret.bmp";
 var playerbody=new Image();
-playerbody.src = "playerbody.bmp";
+playerbody.src = "./texture/playerbody.bmp";
 var playergun=new Image();
-playergun.src = "playergun.bmp";
+playergun.src = "./texture/playergun.bmp";
 var enemygun=new Image();
-enemygun.src = "enemygun.bmp";
+enemygun.src = "./texture/enemygun.bmp";
 var enemyturret=new Image();
-enemyturret.src = "enemyturret.bmp";
+enemyturret.src = "./texture/enemyturret.bmp";
 var enemybody=new Image();
-enemybody.src = "enemybody.bmp";
+enemybody.src = "./texture/enemybody.bmp";
 var enemybodyburned=new Image();
-enemybodyburned.src="enemybodyburned.bmp";
+enemybodyburned.src="./texture/enemybodyburned.bmp";
 var fire=new Image();
-fire.src="fire.bmp";
+fire.src="./texture/fire.bmp";
 var smoke=new Image();
-smoke.src="smoke.bmp";
+smoke.src="./texture/smoke.bmp";
 var impact=new Image();
-impact.src="impact.bmp";
+impact.src="./texture/impact.bmp";
 var playerturretclip=[[15,0],[0,9],[0,27],[4,59],[39,59],[43,27],[43,9],[28,0]];
 var playerbodyclip=[[0,0],[0,96],[10,96],[10,99],[37,99],[37,96],[47,96],[47,0]];
 var playergunclip=[[3,0],[2,1],[2,11],[1,11],[1,16],[2,16],[2,26],[2,28],[0,32],[7,32],[7,28],[5,26],[5,16],[6,16],[6,11],[5,11],[5,1],[4,0]];
@@ -65,40 +63,40 @@ var smokeclip=[[160,2],[148,8],[144,9],[132,26],[121,33],[113,46],[106,53],[101,
 
 
 var enemygungreen=new Image();
-enemygungreen.src = "enemygungreen.bmp";
+enemygungreen.src = "./texture/enemygungreen.bmp";
 var enemyturretgreen=new Image();
-enemyturretgreen.src = "enemyturretgreen.bmp";
+enemyturretgreen.src = "./texture/enemyturretgreen.bmp";
 var enemybodygreen=new Image();
-enemybodygreen.src = "enemybodygreen.bmp";
+enemybodygreen.src = "./texture/enemybodygreen.bmp";
 var enemygunred=new Image();
-enemygunred.src = "enemygunred.bmp";
+enemygunred.src = "./texture/enemygunred.bmp";
 var enemyturretred=new Image();
-enemyturretred.src = "enemyturretred.bmp";
+enemyturretred.src = "./texture/enemyturretred.bmp";
 var enemybodyred=new Image();
-enemybodyred.src = "enemybodyred.bmp";
+enemybodyred.src = "./texture/enemybodyred.bmp";
 var armorb=new Image();
-armorb.src="armorb.bmp";
+armorb.src="./texture/armorb.bmp";
 var armorw=new Image();
-armorw.src="armorw.bmp";
+armorw.src="./texture/armorw.bmp";
 var damageb=new Image();
-damageb.src="damageb.bmp";
+damageb.src="./texture/damageb.bmp";
 var damagew=new Image();
-damagew.src="damagew.bmp";
+damagew.src="./texture/damagew.bmp";
 var speedb=new Image();
-speedb.src="speedb.bmp";
+speedb.src="./texture/speedb.bmp";
 var speedw=new Image();
-speedw.src="speedw.bmp";
+speedw.src="./texture/speedw.bmp";
 var firerateb=new Image();
-firerateb.src="firerateb.bmp";
+firerateb.src="/texture/firerateb.bmp";
 var fireratew=new Image();
-fireratew.src="fireratew.bmp";
+fireratew.src="./texture/fireratew.bmp";
 var health=new Image();
-health.src="health.bmp";
-var gunfire = new Audio("gunfire.wav");
-hitsound=[new Audio("hit1.wav"),new Audio("hit2.wav"),new Audio("hit3.wav")]
-killsound=[new Audio("kill1.wav"),new Audio("kill2.wav"),new Audio("kill3.wav")]
-var inferno = new Audio("inferno.wav");
-var move = new Audio("move.wav");
+health.src="./texture/health.bmp";
+var gunfire = new Audio("./sound/gunfire.wav");
+hitsound=[new Audio("./sound/hit1.wav"),new Audio("./sound/hit2.wav"),new Audio("./sound/hit3.wav")]
+killsound=[new Audio("./sound/kill1.wav"),new Audio("./sound/kill2.wav"),new Audio("./sound/kill3.wav")]
+var inferno = new Audio("./sound/inferno.wav");
+//var move = new Audio("/sound/move.wav");
 
 
 
